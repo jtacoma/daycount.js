@@ -13,3 +13,22 @@ title: JavaScript Calendars
 <ul>
   <li><a href="https://github.com/jtacoma/javascript-calendars">Documentation</a></li>
 </ul>
+
+<pre><code>
+var today = new calendars.day();
+today.gregorian.year
+</code></pre>
+
+<div id="sample" />
+
+<script type="text/javascript">
+  var today = new calendars.day();
+  $(function () {
+    $('#sample').html(
+      'gregorian: ' +
+      today.gregorian.year + '-' + today.gregorian.month + '-' today.gregorian.date
+      + '<br />' + 
+      'julianDay: ' +
+      today.julianDay.number);
+  });
+</script>
