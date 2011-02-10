@@ -3,13 +3,25 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="/media/css/reset-fonts-grids.css" />
+    <link rel="stylesheet" href="/media/css/base.css" />
     <link rel="stylesheet" href="/javascript-calendars/css/screen.css" type="text/css" media="screen, projection" />
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/calendars.js"></script>
   </head>
   <body>
 
-    {{ content }}
+    <div id="doc">
+      <div id="hd">
+      </div>
+      <div id="bd">
+
+        {{ content }}
+
+      </div>
+      <div id="ft">
+      </div>
+    </div>
 
   </body>
 </html>

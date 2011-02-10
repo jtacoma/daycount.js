@@ -5,40 +5,35 @@ title: JavaScript Calendars
 
 h1. JavaScript Calendars
 
-This is a demonstration of the <a href="https://github.com/jtacoma/javascript-calendars">javascript-calendars</a> project.
-
- * Documentation:https://github.com/jtacoma/javascript-calendars
+This is a demonstration of the <a href="https://github.com/jtacoma/javascript-calendars">javascript-calendars</a> project, a library for working with a variety of calendar systems.
 
 h2. Demo: Today
-
-Here's the code...
-
-<pre><code>
-&lt;script type="text/javascript"&gt;
-  $(function () {
-    var today = new calendars.day();
-    $('#sample').html(
-      'gregorian: ' +
-      today.gregorian.year + '-' + today.gregorian.month + '-' + today.gregorian.date
-      + '&lt;br /&gt;' + 
-      'julianDay: ' +
-      today.julianDay.number);
-  });
-&lt;/script&gt;
-&lt;div id="sample" /&gt;
-</code></pre>
-
-...and here's the result:
 
 <script type="text/javascript">
   $(function () {
     var today = new calendars.day();
     $('#sample').html(
-      'gregorian: ' +
-      today.gregorian.year + '-' + today.gregorian.month + '-' + today.gregorian.date
-      + '<br />' + 
-      'julianDay: ' +
-      today.julianDay.number);
+      'gregorian: ' + today.gregorian.toString() + '<br />' + 
+      'julianDay: ' + today.julianDay.number + '<br />' +
+      'dreamspell: ' + today.dreamspell.toString());
+  });
+</script>
+
+bq.
+<div id="sample" />
+
+Here's the code...
+
+bc.
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/calendars.js"></script>
+<script type="text/javascript">
+  $(function () {
+    var today = new calendars.day();
+    $('#sample').html(
+      'gregorian: ' + today.gregorian.toString() + '<br />' + 
+      'julianDay: ' + today.julianDay.number + '<br />' +
+      'dreamspell: ' + today.dreamspell.toString());
   });
 </script>
 <div id="sample" />
