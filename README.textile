@@ -1,21 +1,19 @@
 h1. JavaScript Calendars
 
-This is an effort to develop some JavaScript modules for calendar and date calculations, together with a useful "demo":http://yellowseed.org/javascript-calendars.
+This is an effort to develop some JavaScript modules for calendar and date calculations.
 
 h2. Usage
 
-The `calendars.js` library is published through "GitHub Pages":http://pages.github.com/ at "yellowseed.org/javascript-calendars/lib/calendars.js":http://yellowseed.org/javascript-calendars/lib/calendars.js.
+The *calendars.js* module is published through "GitHub Pages" CDN so you can link to it there:
 
-See the "wiki":https://github.com/jtacoma/javascript-calendars/wiki for more information.
+bc. http://yellowseed.org/javascript-calendars/js/calendars.js
+
+See the "demo":http://yellowseed.org/javascript-calendars for more information about how to use *calendars.js*.
 
 h2. Development
 
 Clone the GitHub repository:
 
-<pre>
-<code>
-git clone git://github.com/jtacoma/jtacoma.github.com.git
-</code>
-</pre>
+bc. git clone git://github.com/jtacoma/jtacoma.github.com.git
 
-*javascript-calendars* uses the cross-vm "Jasmine":http://pivotal.github.com/jasmine/ testing framework.
+See the "wiki":http://github.com/jtacoma/javascript-calendars/wiki for more information.
