@@ -19,13 +19,11 @@ h2. Demo: Today
   });
 </script>
 
-bq.
-<div id="sample" />
+bq. <div id="sample" />
 
 Here's the code...
 
-bc.
-<script type="text/javascript" src="js/jquery.min.js"></script>
+bc. <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/calendars.js"></script>
 <script type="text/javascript">
   $(function () {
