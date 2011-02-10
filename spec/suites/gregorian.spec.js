@@ -13,7 +13,8 @@ describe("calendars.counts.gregorian", function() {
     var gregorian = calendars.counts.gregorian.from_Date(example);
     expect(gregorian.year).toEqual(2012);
     expect(gregorian.month).toEqual(12); // January = 1
-    expect(gregorian.date).toEqual(21);
+    expect(gregorian.dayOfMonth).toEqual(21);
+    expect(gregorian.dayOfYear).toEqual(356);
   });
 
   it("should show up correctly in new days", function() {
@@ -21,7 +22,8 @@ describe("calendars.counts.gregorian", function() {
     expect(day.gregorian.constructor.name).toEqual('gregorian');
     expect(day.gregorian.year).toEqual(2012);
     expect(day.gregorian.month).toEqual(12); // January = 1
-    expect(day.gregorian.date).toEqual(21);
+    expect(day.gregorian.dayOfMonth).toEqual(21);
+    expect(day.gregorian.dayOfYear).toEqual(356);
   });
 
   it("should recognize leap years", function() {
@@ -31,16 +33,40 @@ describe("calendars.counts.gregorian", function() {
     expect(new calendars.counts.gregorian({year:1900}).isLeapYear).toBeFalsy();
   });
 
-  it("should support addition and subtraction", function() {
+  it("should count leap days between dates", function() {
+    expect(calendars.counts.gregorian.countLeapDaysBetween({year:1900,month:1}, {year:2012,month:12})).toEqual(28);
+  });
+
+  it("should support addition", function() {
     var gregorian = new calendars.day(example).gregorian;
-    var yearago = gregorian.plus(-366);
-    expect(yearago.year).toEqual(gregorian.year - 1);
-    expect(yearago.month).toEqual(gregorian.month);
-    expect(yearago.date).toEqual(gregorian.date);
-    var yearsago = gregorian.plus(-366-365-365);
-    expect(yearsago.year).toEqual(gregorian.year - 3);
-    expect(yearsago.month).toEqual(gregorian.month);
-    expect(yearsago.date).toEqual(gregorian.date);
+    for(var diff = 0; diff > -2000; diff -= 17)
+    {
+      var by_plus = gregorian.plusDays(diff);
+      var system = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth+diff);
+      var by_system = calendars.counts.gregorian.from_Date(system);
+      expect(by_plus.toString()).toEqual(by_system.toString());
+    }
+    var extratest = gregorian.from(new calendars.counts.gregorian({year:1978,month:9,dayOfMonth:19}));
+    var verify = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth - extratest);
+    expect(verify.toISOString().split('T')[0]).toEqual('1978-09-19');
+  });
+
+  it("should support difference", function() {
+    var gregorian = new calendars.day(example).gregorian;
+    for(var diff = 0; diff > -2000; diff -= 17)
+    {
+      var by_plus = gregorian.plusDays(diff);
+      var by_plus_from = by_plus.from(gregorian);
+      expect(by_plus_from).toEqual(diff);
+      var from_by_plus = gregorian.from(by_plus);
+      expect(from_by_plus).toEqual(-diff);
+      expect(from_by_plus).toEqual(-by_plus_from);
+    }
+  });
+
+  it("should have a nice toString()", function () {
+    var gregorian = calendars.counts.gregorian.from_Date(example);
+    expect(gregorian.toString()).toEqual('2012-12-21');
   });
 
 });
