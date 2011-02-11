@@ -9,29 +9,29 @@ This is a demonstration of the <a href="https://github.com/jtacoma/javascript-ca
 
 h2. Demo: Today
 
-<script type="text/javascript">
-  $(function () {
-    var today = new calendars.day();
-    $('#sample').html(
-      'gregorian: ' + today.gregorian.toString() + '<br />' + 
-      'julianDay: ' + today.julianDay.number + '<br />' +
-      'dreamspell: ' + today.dreamspell.toString());
-  });
-</script>
-
 bq. <div id="sample" />
 
-Here's the code...
-
-bc. <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/calendars.js"></script>
 <script type="text/javascript">
-  $(function () {
-    var today = new calendars.day();
-    $('#sample').html(
-      'gregorian: ' + today.gregorian.toString() + '<br />' + 
-      'julianDay: ' + today.julianDay.number + '<br />' +
-      'dreamspell: ' + today.dreamspell.toString());
-  });
+  var today = new calendars.day();
+  $('#sample').html(
+    'gregorian: ' + today.gregorian + '<br />' + 
+    'julianDay: ' + today.julianDay + '<br />' +
+    'dreamspell: ' + today.dreamspell);
 </script>
+
+To put this same "calendars of today" on another page, copy and paste the following code into any HTML page:
+
+bc. <script type="text/javascript" src="http://yellowseed.org/javascript-calendars/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://yellowseed.org/javascript-calendars/js/calendars.js"></script>
 <div id="sample" />
+<script type="text/javascript">
+  var today = new calendars.day();
+  $('#sample').html(
+    'gregorian: ' + today.gregorian + '<br />' + 
+    'julianDay: ' + today.julianDay + '<br />' +
+    'dreamspell: ' + today.dreamspell);
+</script>
+
+While you can paste the whole block in one place, you may want to put the first two @<script>@ tags inside @<head>@.  You don't even need the first line if you're already pulling in "jQuery":http://jquery.com from elsewhere.
+
+*Note:* the Dreamspell calendar representation is *<month>.<dayOfMonth>.<kin>*.
