@@ -10,14 +10,17 @@ calendars.counts.julianDay = (function() {
 
   // Instance methods:
 
-  function plus(days) {
+  julianDay.prototype.plus = function(days) {
     return new calendars.counts.julianDay(this.number + days);
   };
-  julianDay.prototype.plus = plus;
+
+  julianDay.prototype.toString = function() {
+    return this.number.toString();
+  };
 
   // Class methods:
 
-  function from_Date(system) {
+  julianDay.from_Date = function(system) {
     // from Wikipedia's Julian_day article:
     var a = parseInt((13 - system.getMonth()) / 12);
     var y = system.getFullYear() + 4800 - a;
@@ -29,7 +32,6 @@ calendars.counts.julianDay = (function() {
       number: number,
     });
   };
-  julianDay.from_Date = from_Date;
 
   return julianDay;
 })();

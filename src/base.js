@@ -9,15 +9,33 @@ var calendars = {};
  */
 calendars.day = (function() {
   function day(arg) {
-    if(!arg || arg === null) {
+    if(!arg || arg === null)
       arg = new Date();
-    }
     var builder_name = 'from_' + arg.constructor.name;
-    for(var name in calendars.counts) {
-      var count = calendars.counts[name];
-      if(!count.hasOwnProperty(builder_name)) continue;
-      var builder = count[builder_name];
-      this[name] = builder(arg);
+    this[arg.constructor.name] = arg;
+    var done = [arg.constructor.name];
+    var todo = []
+    for(var name in calendars.counts)
+      if(!this.hasOwnProperty(name))
+        todo.push(name);
+    var finished = false;
+    while(!finished) {
+      finished = true;
+      for (var indexTodo = todo.length-1; indexTodo >= 0; --indexTodo) {
+        var nameTodo = todo[indexTodo];
+        var countTodo = calendars.counts[nameTodo];
+        for (var indexDone = 0; indexDone < done.length; ++indexDone) {
+          var nameDone = done[indexDone];
+          var builderNameTodo = 'from_' + nameDone;
+          if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
+          var builder = countTodo[builderNameTodo];
+          this[nameTodo] = builder(this[nameDone]);
+          done.push(nameTodo);
+          todo.splice(indexTodo, 1)
+          finished = false;
+          break;
+        }
+      }
     }
   };
   return day;

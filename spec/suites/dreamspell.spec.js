@@ -53,6 +53,10 @@ describe("calendars.counts.dreamspell", function() {
     expect(day.dreamspell).toBeDefined();
     expect(day.dreamspell.constructor.name).toEqual('dreamspell');
     expect(day.dreamspell.toString()).toEqual('6.9.207');
+    var day = new calendars.day(new Date(example.year, example.month-1, example.dayOfMonth));
+    expect(day.dreamspell).toBeDefined();
+    expect(day.dreamspell.constructor.name).toEqual('dreamspell');
+    expect(day.dreamspell.toString()).toEqual('6.9.207');
   });
 
   it("should have a nice toString()", function() {

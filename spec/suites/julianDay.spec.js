@@ -20,10 +20,15 @@ describe("calendars.counts.julianDay", function() {
     expect(day.julianDay.number).toEqual(2456283);
   });
 
-  it("should support addition and subtraction", function() {
+  it("should support addition", function() {
     var julianDay = new calendars.day(example).julianDay;
     var yearago = julianDay.plus(-366);
     expect(yearago.number).toEqual(julianDay.number - 366);
+  });
+
+  it("should have a nice toString()", function() {
+    var julianDay = new calendars.day(example).julianDay;
+    expect(julianDay.toString()).toEqual('2456283');
   });
 
 });
