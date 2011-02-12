@@ -1,13 +1,13 @@
 ---
 layout: default
-title: JavaScript Calendars
+title: calendar.js
 ---
 
-h1. JavaScript Calendars
+h1. calendar.js
 
-This is a demonstration of the <a href="https://github.com/jtacoma/javascript-calendars">javascript-calendars</a> project, a library for working with a variety of calendar systems.
+This is a demonstration of the <a href="https://github.com/jtacoma/calendar.js">calendar.js</a> project, a library for working with calendars.
 
-h2. Demo: Today
+For example, here is some simple information about today:
 
 bq. <div id="sample" />
 
@@ -19,10 +19,10 @@ bq. <div id="sample" />
     'dreamspell: ' + today.dreamspell);
 </script>
 
-To put this same "calendars of today" on another page, copy and paste the following code into any HTML page:
+To put this same information on another page, copy and paste the following code:
 
-bc. <script type="text/javascript" src="http://yellowseed.org/javascript-calendars/js/jquery.min.js"></script>
-<script type="text/javascript" src="http://yellowseed.org/javascript-calendars/js/calendars.js"></script>
+bc. <script type="text/javascript" src="http://yellowseed.org/calendar.js/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://yellowseed.org/calendar.js/js/calendars.js"></script>
 <div id="sample" />
 <script type="text/javascript">
   var today = new calendars.day();
@@ -33,5 +33,3 @@ bc. <script type="text/javascript" src="http://yellowseed.org/javascript-calenda
 </script>
 
 While you can paste the whole block in one place, you may want to put the first two @<script>@ tags inside @<head>@.  You don't even need the first line if you're already pulling in "jQuery":http://jquery.com from elsewhere.
-
-*Note:* the Dreamspell calendar representation is *<month>.<dayOfMonth>.<kin>*.
