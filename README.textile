@@ -1,4 +1,4 @@
-h1. JavaScript Calendars
+h1. calendar.js
 
 This is an effort to develop some JavaScript modules for calendar and date calculations.
 
