@@ -1,13 +1,13 @@
 /**
- * Top level namespace for javascript-calendars, a general purpose calendar
+ * Top level namespace for daycount.js, a general purpose calendar
  * and date calculations library.
  */
-var calendars = {};
+var daycount = {};
 
 /**
  * The Day type, which may include associated information from any calendar system.
  */
-calendars.day = (function() {
+daycount.day = (function() {
   function day(arg) {
     if(!arg || arg === null)
       arg = new Date();
@@ -15,7 +15,7 @@ calendars.day = (function() {
     this[arg.constructor.name] = arg;
     var done = [arg.constructor.name];
     var todo = []
-    for(var name in calendars.counts)
+    for(var name in daycount.counts)
       if(!this.hasOwnProperty(name))
         todo.push(name);
     var finished = false;
@@ -23,7 +23,7 @@ calendars.day = (function() {
       finished = true;
       for (var indexTodo = todo.length-1; indexTodo >= 0; --indexTodo) {
         var nameTodo = todo[indexTodo];
-        var countTodo = calendars.counts[nameTodo];
+        var countTodo = daycount.counts[nameTodo];
         for (var indexDone = 0; indexDone < done.length; ++indexDone) {
           var nameDone = done[indexDone];
           var builderNameTodo = 'from_' + nameDone;
@@ -44,16 +44,16 @@ calendars.day = (function() {
 /**
  * A collection of counts i.e. calendar systems.  Each calendar system should be added to this object.
  */
-calendars.counts = {};
+daycount.counts = {};
 
-calendars.version_ = {
+daycount.version_ = {
   major: 0,
   minor: 0,
   build: 1,
   revision: 1,
 };
 
-calendars.counts.dreamspell = (function () {
+daycount.counts.dreamspell = (function () {
 
   function dreamspell (arg) {
     this.month = parseInt(arg && arg.month);
@@ -74,7 +74,7 @@ calendars.counts.dreamspell = (function () {
     if (reference.dreamspell.constructor !== dreamspell)
       reference.dreamspell = new dreamspell(reference.dreamspell);
     var allDays = gregorian.from(reference.gregorian);
-    var leapDays = calendars.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
+    var leapDays = daycount.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
     return plusDays(reference.dreamspell, allDays - leapDays);
   };
 
@@ -96,7 +96,7 @@ calendars.counts.dreamspell = (function () {
       dayOfMonth = dayOfYear - ((month - 1) * 28);
     }
     var kin = isNaN(dreamspell.kin) ? NaN : (dreamspell.kin + (days % 260) + 259) % 260 + 1;
-    return new calendars.counts.dreamspell({
+    return new daycount.counts.dreamspell({
       month: month,
       dayOfMonth: dayOfMonth,
       kin: kin,
@@ -108,7 +108,7 @@ calendars.counts.dreamspell = (function () {
 /**
  * Gregorian calendar system, as already implemented in system datetime libraries everywhere.
  */
-calendars.counts.gregorian = (function() {
+daycount.counts.gregorian = (function() {
 
   var dayOfYear = [0,31,28,31,30,31,30,31,31,30,31,30,31];
   for(var i = 1; i < dayOfYear.length; ++i)
@@ -163,7 +163,7 @@ calendars.counts.gregorian = (function() {
   };
 
   gregorian.from_Date = function (system) {
-    return new calendars.counts.gregorian({
+    return new daycount.counts.gregorian({
       year: system.getFullYear(),
       month: system.getMonth() + 1,
       dayOfMonth: system.getDate(),
@@ -175,7 +175,7 @@ calendars.counts.gregorian = (function() {
 /**
  * Julian day numbering system.
  */
-calendars.counts.julianDay = (function() {
+daycount.counts.julianDay = (function() {
 
   function julianDay(arg) {
     if(typeof(arg) == 'object') arg = arg.number;
@@ -185,7 +185,7 @@ calendars.counts.julianDay = (function() {
   // Instance methods:
 
   julianDay.prototype.plus = function(days) {
-    return new calendars.counts.julianDay(this.number + days);
+    return new daycount.counts.julianDay(this.number + days);
   };
 
   julianDay.prototype.toString = function() {
@@ -202,7 +202,7 @@ calendars.counts.julianDay = (function() {
     var number = system.getDate() + Math.floor((153 * m + 2) / 5)
              + 365 * y + Math.floor(y / 4) - Math.floor(y / 100)
              + Math.floor(y / 400) - 32045;
-    return new calendars.counts.julianDay({
+    return new daycount.counts.julianDay({
       number: number,
     });
   };
