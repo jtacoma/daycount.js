@@ -1,5 +1,5 @@
-h1. calendar.js
+h1. daycount.js
 
-This is an effort to develop some JavaScript modules for calendar and date calculations.
+This is an effort to develop some modules for calendar and date calculations.
 
-For more information, see the "demo":http://yellowseed.org/calendar.js/.
+For more information, see the "demo":http://yellowseed.org/daycount.js/.

@@ -1,13 +1,13 @@
 /**
- * Top level namespace for javascript-calendars, a general purpose calendar
+ * Top level namespace for daycount.js, a general purpose calendar
  * and date calculations library.
  */
-var calendars = {};
+var daycount = {};
 
 /**
  * The Day type, which may include associated information from any calendar system.
  */
-calendars.day = (function() {
+daycount.day = (function() {
   function day(arg) {
     if(!arg || arg === null)
       arg = new Date();
@@ -15,7 +15,7 @@ calendars.day = (function() {
     this[arg.constructor.name] = arg;
     var done = [arg.constructor.name];
     var todo = []
-    for(var name in calendars.counts)
+    for(var name in daycount.counts)
       if(!this.hasOwnProperty(name))
         todo.push(name);
     var finished = false;
@@ -23,7 +23,7 @@ calendars.day = (function() {
       finished = true;
       for (var indexTodo = todo.length-1; indexTodo >= 0; --indexTodo) {
         var nameTodo = todo[indexTodo];
-        var countTodo = calendars.counts[nameTodo];
+        var countTodo = daycount.counts[nameTodo];
         for (var indexDone = 0; indexDone < done.length; ++indexDone) {
           var nameDone = done[indexDone];
           var builderNameTodo = 'from_' + nameDone;
@@ -44,9 +44,9 @@ calendars.day = (function() {
 /**
  * A collection of counts i.e. calendar systems.  Each calendar system should be added to this object.
  */
-calendars.counts = {};
+daycount.counts = {};
 
-calendars.version_ = {
+daycount.version_ = {
   major: 0,
   minor: 0,
   build: 1,

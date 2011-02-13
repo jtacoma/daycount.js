@@ -1,19 +1,19 @@
-describe("calendars (base)", function() {
+describe("daycount (base)", function() {
 
   it("should exist and be a well-formed module", function() {
-    expect(calendars).toBeDefined();
-    expect(calendars.version_).toBeDefined();
-    expect(calendars.version_.major).toBeDefined();
+    expect(daycount).toBeDefined();
+    expect(daycount.version_).toBeDefined();
+    expect(daycount.version_.major).toBeDefined();
   });
 
   it("should have a well-formed day class", function() {
-    expect(calendars.day).toBeDefined();
-    expect(calendars.day.prototype).toBeDefined();
-    expect(new calendars.day().constructor.name).toEqual('day');
+    expect(daycount.day).toBeDefined();
+    expect(daycount.day.prototype).toBeDefined();
+    expect(new daycount.day().constructor.name).toEqual('day');
   });
 
   it("should have a list of counts", function() {
-    expect(calendars.counts).toBeDefined();
+    expect(daycount.counts).toBeDefined();
   });
 
 });

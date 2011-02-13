@@ -1,7 +1,7 @@
 /**
  * Julian day numbering system.
  */
-calendars.counts.julianDay = (function() {
+daycount.counts.julianDay = (function() {
 
   function julianDay(arg) {
     if(typeof(arg) == 'object') arg = arg.number;
@@ -11,7 +11,7 @@ calendars.counts.julianDay = (function() {
   // Instance methods:
 
   julianDay.prototype.plus = function(days) {
-    return new calendars.counts.julianDay(this.number + days);
+    return new daycount.counts.julianDay(this.number + days);
   };
 
   julianDay.prototype.toString = function() {
@@ -28,7 +28,7 @@ calendars.counts.julianDay = (function() {
     var number = system.getDate() + Math.floor((153 * m + 2) / 5)
              + 365 * y + Math.floor(y / 4) - Math.floor(y / 100)
              + Math.floor(y / 400) - 32045;
-    return new calendars.counts.julianDay({
+    return new daycount.counts.julianDay({
       number: number,
     });
   };

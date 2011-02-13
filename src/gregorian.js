@@ -1,7 +1,7 @@
 /**
  * Gregorian calendar system, as already implemented in system datetime libraries everywhere.
  */
-calendars.counts.gregorian = (function() {
+daycount.counts.gregorian = (function() {
 
   var dayOfYear = [0,31,28,31,30,31,30,31,31,30,31,30,31];
   for(var i = 1; i < dayOfYear.length; ++i)
@@ -56,7 +56,7 @@ calendars.counts.gregorian = (function() {
   };
 
   gregorian.from_Date = function (system) {
-    return new calendars.counts.gregorian({
+    return new daycount.counts.gregorian({
       year: system.getFullYear(),
       month: system.getMonth() + 1,
       dayOfMonth: system.getDate(),

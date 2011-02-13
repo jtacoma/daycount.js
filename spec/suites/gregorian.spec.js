@@ -1,16 +1,16 @@
-describe("calendars.counts.gregorian", function() {
+describe("daycount.counts.gregorian", function() {
 
   var example = new Date(2012, 11, 21); // January = 0
 
   it("should exist as a well-formed class", function() {
-    expect(calendars.counts.gregorian).toBeDefined();
-    expect(calendars.counts.gregorian.prototype).toBeDefined();
-    expect(new calendars.counts.gregorian().constructor.name).toEqual('gregorian');
+    expect(daycount.counts.gregorian).toBeDefined();
+    expect(daycount.counts.gregorian.prototype).toBeDefined();
+    expect(new daycount.counts.gregorian().constructor.name).toEqual('gregorian');
   });
 
   it("should handle conversion from system datetime", function() {
-    expect(calendars.counts.gregorian.from_Date).toBeDefined();
-    var gregorian = calendars.counts.gregorian.from_Date(example);
+    expect(daycount.counts.gregorian.from_Date).toBeDefined();
+    var gregorian = daycount.counts.gregorian.from_Date(example);
     expect(gregorian.year).toEqual(2012);
     expect(gregorian.month).toEqual(12); // January = 1
     expect(gregorian.dayOfMonth).toEqual(21);
@@ -18,7 +18,7 @@ describe("calendars.counts.gregorian", function() {
   });
 
   it("should show up correctly in new days", function() {
-    var day = new calendars.day(example);
+    var day = new daycount.day(example);
     expect(day.gregorian.constructor.name).toEqual('gregorian');
     expect(day.gregorian.year).toEqual(2012);
     expect(day.gregorian.month).toEqual(12); // January = 1
@@ -27,32 +27,32 @@ describe("calendars.counts.gregorian", function() {
   });
 
   it("should recognize leap years", function() {
-    expect(new calendars.counts.gregorian({year:2012}).isLeapYear).toBeTruthy();
-    expect(new calendars.counts.gregorian({year:2011}).isLeapYear).toBeFalsy();
-    expect(new calendars.counts.gregorian({year:2000}).isLeapYear).toBeTruthy();
-    expect(new calendars.counts.gregorian({year:1900}).isLeapYear).toBeFalsy();
+    expect(new daycount.counts.gregorian({year:2012}).isLeapYear).toBeTruthy();
+    expect(new daycount.counts.gregorian({year:2011}).isLeapYear).toBeFalsy();
+    expect(new daycount.counts.gregorian({year:2000}).isLeapYear).toBeTruthy();
+    expect(new daycount.counts.gregorian({year:1900}).isLeapYear).toBeFalsy();
   });
 
   it("should count leap days between dates", function() {
-    expect(calendars.counts.gregorian.countLeapDaysBetween({year:1900,month:1}, {year:2012,month:12})).toEqual(28);
+    expect(daycount.counts.gregorian.countLeapDaysBetween({year:1900,month:1}, {year:2012,month:12})).toEqual(28);
   });
 
   it("should support addition", function() {
-    var gregorian = new calendars.day(example).gregorian;
+    var gregorian = new daycount.day(example).gregorian;
     for(var diff = 0; diff > -2000; diff -= 17)
     {
       var by_plus = gregorian.plusDays(diff);
       var system = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth+diff);
-      var by_system = calendars.counts.gregorian.from_Date(system);
+      var by_system = daycount.counts.gregorian.from_Date(system);
       expect(by_plus.toString()).toEqual(by_system.toString());
     }
-    var extratest = gregorian.from(new calendars.counts.gregorian({year:1978,month:9,dayOfMonth:19}));
+    var extratest = gregorian.from(new daycount.counts.gregorian({year:1978,month:9,dayOfMonth:19}));
     var verify = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth - extratest);
     expect(verify.toISOString().split('T')[0]).toEqual('1978-09-19');
   });
 
   it("should support difference", function() {
-    var gregorian = new calendars.day(example).gregorian;
+    var gregorian = new daycount.day(example).gregorian;
     for(var diff = 0; diff > -2000; diff -= 17)
     {
       var by_plus = gregorian.plusDays(diff);
@@ -65,7 +65,7 @@ describe("calendars.counts.gregorian", function() {
   });
 
   it("should have a nice toString()", function () {
-    var gregorian = calendars.counts.gregorian.from_Date(example);
+    var gregorian = daycount.counts.gregorian.from_Date(example);
     expect(gregorian.toString()).toEqual('2012-12-21');
   });
 

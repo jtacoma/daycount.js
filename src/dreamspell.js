@@ -1,4 +1,4 @@
-calendars.counts.dreamspell = (function () {
+daycount.counts.dreamspell = (function () {
 
   function dreamspell (arg) {
     this.month = parseInt(arg && arg.month);
@@ -19,7 +19,7 @@ calendars.counts.dreamspell = (function () {
     if (reference.dreamspell.constructor !== dreamspell)
       reference.dreamspell = new dreamspell(reference.dreamspell);
     var allDays = gregorian.from(reference.gregorian);
-    var leapDays = calendars.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
+    var leapDays = daycount.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
     return plusDays(reference.dreamspell, allDays - leapDays);
   };
 
@@ -41,7 +41,7 @@ calendars.counts.dreamspell = (function () {
       dayOfMonth = dayOfYear - ((month - 1) * 28);
     }
     var kin = isNaN(dreamspell.kin) ? NaN : (dreamspell.kin + (days % 260) + 259) % 260 + 1;
-    return new calendars.counts.dreamspell({
+    return new daycount.counts.dreamspell({
       month: month,
       dayOfMonth: dayOfMonth,
       kin: kin,
