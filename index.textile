@@ -13,21 +13,20 @@ bq. <div id="sample" />
 
 <script type="text/javascript">
   var today = new daycount.day();
-  $('#sample').html(
+  document.getElementById('sample').innerHTML =
     'gregorian: ' + today.gregorian + '<br />' + 
     'julianDay: ' + today.julianDay + '<br />' +
-    'dreamspell: ' + today.dreamspell);
+    'dreamspell: ' + today.dreamspell;
 </script>
 
-This information was calculated by your browser, on your machine, in your time zone.  To add this to your page, copy and paste the following code into the @<body>@ of any html file:
+Your browser calculated this information in your time zone when it loaded this page.  To add this to another HTML page, just copy and paste this code:
 
-bc. <script type="text/javascript" src="http://yellowseed.org/daycount.js/js/jquery.min.js"></script>
-<script type="text/javascript" src="http://yellowseed.org/daycount.js/js/daycount-0.0.js"></script>
+bc. <script type="text/javascript" src="http://yellowseed.org/daycount.js/js/daycount-0.0.js"></script>
 <div id="sample" />
 <script type="text/javascript">
   var today = new daycount.day();
-  $('#sample').html(
+  document.getElementById('sample').innerHTML =
     'gregorian: ' + today.gregorian + '<br />' + 
     'julianDay: ' + today.julianDay + '<br />' +
-    'dreamspell: ' + today.dreamspell);
+    'dreamspell: ' + today.dreamspell;
 </script>
