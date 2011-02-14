@@ -10,16 +10,30 @@ For some examples of what can be done, see the "demo":http://yellowseed.org/dayc
 
 h2. What day is it?
 
-Assuming a count of days as rotations of the planet Earth relative to its Sun, the answer to this question depends on one's position on the surface of Earth as well as when, relative to these rotations, each day begins and ends.  In the Gregorian count, days begin and end at midnight, which depends on the time zone, which depends on one's position on the surface of the Earth.  The Julian Day count, on the other hand, separates one day from the next at noon.  The Dreamspell calendar synchronizes fairly well with the Gregorian, ending its days at nadir (usually a little after local midnight), but skips each Gregorian leap day as though it never happened.
+Assuming a count of days as rotations of the planet Earth relative to its Sun, the answer to this question depends on one's position on the surface of Earth as well as when, relative to these rotations, each day begins and ends.
 
-p. *Challenge:* Given a Gregorian Calendar date, what is the associated Julian Day Number?
+----
 
-bq.. A day in the Gregorian Calendar count begins and ends at midnight local time.  This means it will almost always span two days in the Julian Day Number count, which starts and ends days at noon UTC.  Therefore there is not one correct answer to this question.
+*Question:* Given a Gregorian Calendar date, what is the associated Julian Day Number?
 
-*Answer:* The class @daycount.counts.julianDay@ calculates a number only from a date _and time_, never from a date alone.
+*Challenge:* A day in the Gregorian Calendar count begins and ends at midnight in the local time zone.  This means it will almost always span two days in the Julian Day Number count, which starts and ends days at noon UTC.  Therefore there is no one correct answer to this question.
 
-p. *Challenge:* If we calculate the Dreamspell count for the day just before a Gregorian leap day and then move the count forward one day, what should be the result?
+*Response:* The class @daycount.counts.julianDay@ calculates a number only from a date _and time_, never from a date alone.
 
-bq.. While the Dreamspell Calendar skips Gregorian leap days, it does not represent those leap days within its own count.  Therefore, without additional information from the Gregorian calendar, we cannot reliably answer this question.
+----
 
-*Answer:* The class @daycount.counts.dreamspell@ does not support incrementing or decrementing the count by days.  To do this arithmetic, you must use another count and then convert back to this one.
+*Question:* If we calculate the Dreamspell count for the day just before a Gregorian leap day and then move the count forward one day, what should be the result?
+
+*Challenge:* While the Dreamspell Calendar skips Gregorian leap days, it does not represent those leap days within its own count.  Therefore, without additional information from the Gregorian calendar, we cannot reliably answer this question.
+
+*Response:* The class @daycount.counts.dreamspell@ does not support incrementing or decrementing the count by days.  To do this arithmetic, you must use another count and then convert back to this one.
+
+h2. Building
+
+On *nix:
+
+bc. cat src/* > daycount.js
+
+or at a DOS prompt:
+
+bc. type src\* > daycount.js
