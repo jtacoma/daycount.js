@@ -18,12 +18,12 @@ describe("daycount.counts.gregorian", function() {
   });
 
   it("should show up correctly in new days", function() {
-    var day = new daycount.day(example);
-    expect(day.gregorian.constructor.name).toEqual('gregorian');
-    expect(day.gregorian.year).toEqual(2012);
-    expect(day.gregorian.month).toEqual(12); // January = 1
-    expect(day.gregorian.dayOfMonth).toEqual(21);
-    expect(day.gregorian.dayOfYear).toEqual(356);
+    var moment = new daycount.moment(example);
+    expect(moment.gregorian.constructor.name).toEqual('gregorian');
+    expect(moment.gregorian.year).toEqual(2012);
+    expect(moment.gregorian.month).toEqual(12); // January = 1
+    expect(moment.gregorian.dayOfMonth).toEqual(21);
+    expect(moment.gregorian.dayOfYear).toEqual(356);
   });
 
   it("should recognize leap years", function() {
@@ -38,7 +38,7 @@ describe("daycount.counts.gregorian", function() {
   });
 
   it("should support addition", function() {
-    var gregorian = new daycount.day(example).gregorian;
+    var gregorian = new daycount.moment(example).gregorian;
     for(var diff = 0; diff > -2000; diff -= 17)
     {
       var by_plus = gregorian.plusDays(diff);
@@ -52,7 +52,7 @@ describe("daycount.counts.gregorian", function() {
   });
 
   it("should support difference", function() {
-    var gregorian = new daycount.day(example).gregorian;
+    var gregorian = new daycount.moment(example).gregorian;
     for(var diff = 0; diff > -2000; diff -= 17)
     {
       var by_plus = gregorian.plusDays(diff);

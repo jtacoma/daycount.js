@@ -37,3 +37,7 @@ bc. cat src/* > daycount.js
 or at a DOS prompt:
 
 bc. type src\* > daycount.js
+
+h2. Developing
+
+Copyright (c) 2011 Joshua Tacoma. This software is licensed under the MIT License.

@@ -49,14 +49,14 @@ describe("daycount.counts.dreamspell", function() {
   });
 
   it("should show up correctly in new days", function() {
-    var day = new daycount.day(example);
-    expect(day.dreamspell).toBeDefined();
-    expect(day.dreamspell.constructor.name).toEqual('dreamspell');
-    expect(day.dreamspell.toString()).toEqual('6.9.207');
-    var day = new daycount.day(new Date(example.year, example.month-1, example.dayOfMonth));
-    expect(day.dreamspell).toBeDefined();
-    expect(day.dreamspell.constructor.name).toEqual('dreamspell');
-    expect(day.dreamspell.toString()).toEqual('6.9.207');
+    var moment = new daycount.moment(example);
+    expect(moment.dreamspell).toBeDefined();
+    expect(moment.dreamspell.constructor.name).toEqual('dreamspell');
+    expect(moment.dreamspell.toString()).toEqual('6.9.207');
+    var moment = new daycount.moment(new Date(example.year, example.month-1, example.dayOfMonth));
+    expect(moment.dreamspell).toBeDefined();
+    expect(moment.dreamspell.constructor.name).toEqual('dreamspell');
+    expect(moment.dreamspell.toString()).toEqual('6.9.207');
   });
 
   it("should have a nice toString()", function() {
