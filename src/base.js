@@ -1,3 +1,13 @@
+/*
+ * daycount.js v0.0.1
+ * http://yellowseed.org/daycount.js/
+ *
+ * Copyright 2011, Joshua Tacoma
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
 // All other globals defined in this module are stored within this object:
 var daycount = {};
 
