@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.0.1
+ * daycount.js v0.0.2
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -97,7 +97,6 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 0,
-  build: 1,
-  revision: 1,
+  build: 2,
 };
 
