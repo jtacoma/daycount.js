@@ -23,19 +23,24 @@ daycount.moment = (function() {
     if(!arg || arg === null)
       arg = new Date();
 
-    // Store argument as the only known property of this:
-    this[arg.constructor.name] = arg;
-
     // Now, we're going to calculate as many counts as possible...
-
-    // 'done' lists known counts:
-    var done = [arg.constructor.name];
 
     // 'todo' lists counts to be calculated:
     var todo = []
     for(var name in daycount.counts)
-      if(!this.hasOwnProperty(name))
-        todo.push(name);
+    {
+      todo.push(name);
+      // wipe out any counts lingering from previous calculations:
+      if(name in this)
+        delete this[name];
+    }
+
+    // 'done' lists known counts:
+    var done = [arg.constructor.name];
+    // TODO: make sure that no item in 'done' is also in 'todo'.
+
+    // Store argument as the only known property of this:
+    this[arg.constructor.name] = arg;
 
     var finished = false;
     while(!finished) {
@@ -75,7 +80,9 @@ daycount.moment = (function() {
   };
 
   moment.prototype.incrementEarthSolarDays = function(days) {
-    if (this['gregorian'])
+    if (this['Date'])
+      this.set(new Date(this.Date.getFullYear(), this.Date.getMonth(), this.Date.getDate() + days));
+    else if (this['gregorian'])
       this.set(this.gregorian.plusDays(days));
     else if(this['julianDay'])
       this.set(this.julianDay.plusDays(days));
