@@ -16,8 +16,10 @@ daycount.moment = (function() {
 
   // 'moment' constructor:
   function moment(arg) {
+    this.set(arg);
+  };
 
-    // Default argument is current system date:
+  moment.prototype.set = function(arg) {
     if(!arg || arg === null)
       arg = new Date();
 
@@ -72,10 +74,20 @@ daycount.moment = (function() {
     }
   };
 
+  moment.prototype.incrementEarthSolarDays = function(days) {
+    if (this['gregorian'])
+      this.set(this.gregorian.plusDays(days));
+    else if(this['julianDay'])
+      this.set(this.julianDay.plusDays(days));
+    else
+      throw 'this moment has no counts that support the specified increment.';
+  };
+
+  moment.prototype.increment = moment.prototype.incrementEarthSolarDays;
+
   return moment;
 })();
 
-// Backwards compatible name: 'moment' was once called 'day'.
 daycount.day = daycount.moment;
 
 // A collection of counts i.e. calendar systems.
