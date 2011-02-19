@@ -9,8 +9,8 @@ daycount.counts.thoth = (function() {
     this.venusDayOfWeek = (this.venusDayOfYear - 1) % 7 + 1;
   };
 
-  thoth.from_julianDay = function (julianDay) {
-    var offset = julianDay.number - 2455610;
+  thoth.from_gregorian = function (gregorian) {
+    var offset = gregorian.from(new daycount.counts.gregorian({year:2011,month:2,dayOfMonth:17}));
     var base = (7 * (32 * 7)) + 91;
     var actual = base + offset;
     var venusYear = parseInt(actual / (32 * 7)) + 1;

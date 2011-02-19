@@ -1,6 +1,6 @@
 describe("daycount.counts.thoth", function() {
 
-  var example_julianDay = new daycount.counts.julianDay({number:2455610});
+  var example_gregorian = new daycount.counts.gregorian({year:2011, month:2, dayOfMonth:17});
 
   it("should exist as a well-formed class", function() {
     expect(daycount.counts.thoth).toBeDefined();
@@ -8,24 +8,24 @@ describe("daycount.counts.thoth", function() {
     expect(daycount.counts.thoth.name).toEqual('thoth');
   });
 
-  it("should handle conversion from julianDay", function() {
-    expect(daycount.counts.thoth.from_julianDay).toBeDefined();
+  it("should handle conversion from gregorian", function() {
+    expect(daycount.counts.thoth.from_gregorian).toBeDefined();
     var references = [
       {
-        julianDay: example_julianDay,
+        gregorian: example_gregorian,
         thoth: new daycount.counts.thoth({venusYear:8,venusDayOfYear:92}),
       },
     ];
     for(var i = 0; i < references.length; ++i)
     {
       var ref = references[i];
-      var thoth = daycount.counts.thoth.from_julianDay(ref.julianDay);
+      var thoth = daycount.counts.thoth.from_gregorian(ref.gregorian);
       expect(thoth.toString()).toEqual(ref.thoth.toString());
     }
   });
 
   it("should show up correctly in new days", function() {
-    var moment = new daycount.moment(example_julianDay);
+    var moment = new daycount.moment(example_gregorian);
     expect(moment.thoth).toBeDefined();
     expect(moment.thoth.constructor.name).toEqual('thoth');
     expect(moment.thoth.venusYear).toEqual(8);
@@ -36,7 +36,7 @@ describe("daycount.counts.thoth", function() {
   });
 
   it("should have a nice toString()", function() {
-    var thoth = daycount.counts.thoth.from_julianDay(example_julianDay);
+    var thoth = daycount.counts.thoth.from_gregorian(example_gregorian);
     expect(thoth.toString()).toEqual('VC:8/92 (8,14,1)');
   });
 
