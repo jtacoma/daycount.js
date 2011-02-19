@@ -5,6 +5,7 @@ h1. daycount.js
 * *Gregorian Calendar*, representing each date as a year, a month, and a day of month.
 * *Julian Day Number*, in which each day is assigned a unique whole number.
 * *Dreamspell Calendar*, counting 13 moons per year and including a 260 day cycle.
+* *Thoth Count*, specifically its *Venus Count*, a 224 day cycle.
 
 For some examples of what can be done, see the "demo":http://yellowseed.org/daycount.js/.
 
@@ -12,15 +13,11 @@ h2. What day is it?
 
 Assuming a count of days as rotations of the planet Earth relative to its Sun, the answer to this question depends on one's position on the surface of Earth as well as when, relative to these rotations, each day begins and ends.
 
-----
-
 *Question:* Given a Gregorian Calendar date, what is the associated Julian Day Number?
 
 *Challenge:* A day in the Gregorian Calendar count begins and ends at midnight in the local time zone.  This means it will almost always span two days in the Julian Day Number count, which starts and ends days at noon UTC.  Therefore there is no one correct answer to this question.
 
-*Response:* The class @daycount.counts.julianDay@ calculates a number only from a date _and time_, never from a date alone.
-
-----
+*Response:* The class @daycount.counts.julianDay@ calculates a number only from a date _and time and time zone_, never from a date alone.
 
 *Question:* If we calculate the Dreamspell count for the day just before a Gregorian leap day and then move the count forward one day, what should be the result?
 
@@ -39,5 +36,7 @@ or at a DOS prompt:
 bc. type src\* > daycount.js
 
 h2. Developing
+
+Collaborators and co-conspirators welcome.  Feel free to fork the github project and send pull requests.
 
 Copyright (c) 2011 Joshua Tacoma. This software is licensed under the MIT License.
