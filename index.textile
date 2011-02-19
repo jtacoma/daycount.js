@@ -16,7 +16,8 @@ bq. <div id="sample" />
   document.getElementById('sample').innerHTML =
     'Gregorian Calendar: ' + today.gregorian + '<br />' + 
     'Julian Day Number: ' + today.julianDay + '<br />' +
-    'Dreamspell Calendar: ' + today.dreamspell;
+    'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
+    'Thoth: ' + today.thoth;
 </script>
 
 Your browser calculated this information in your time zone when it loaded this page.  To add this to another HTML page, just copy and paste this code:
@@ -28,5 +29,6 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.0.js"></script>
   document.getElementById('sample').innerHTML =
     'Gregorian Calendar: ' + today.gregorian + '<br />' + 
     'Julian Day Number: ' + today.julianDay + '<br />' +
-    'Dreamspell Calendar: ' + today.dreamspell;
+    'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
+    'Thoth: ' + today.thoth;
 </script>
