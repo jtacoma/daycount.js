@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.0.4
+ * daycount.js v0.1.0
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -95,15 +95,13 @@ daycount.moment = (function() {
   return moment;
 })();
 
-daycount.day = daycount.moment;
-
 // A collection of counts i.e. calendar systems.
 // Each calendar system should be added to this object.
 daycount.counts = {};
 
 daycount.version_ = {
   major: 0,
-  minor: 0,
-  build: 2,
+  minor: 1,
+  build: 0,
 };
 
