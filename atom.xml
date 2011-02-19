@@ -1,0 +1,24 @@
+---
+layout: nil
+reference: yellowseed.org/daycount.js
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+  <title>daycount.js log</title>
+  <link href="http://{{ page.reference }}/atom.xml" rel="self"/>
+  <link href="http://{{ page.reference }}"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>http://{{ page.reference }}</id>
+
+  {% for post in site.posts %}
+  <entry>
+    <title>{{ post.title }}</title>
+    <link href="http://{{ page.reference }}{{ post.url }}"/>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <id>http://{{ page.reference }}{{ post.id }}</id>
+    <content type="html">{{ post.content | xml_escape }}</content>
+  </entry>
+  {% endfor %}
+ 
+</feed>

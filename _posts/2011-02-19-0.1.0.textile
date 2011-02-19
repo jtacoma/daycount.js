@@ -1,0 +1,16 @@
+---
+layout: post
+category: log
+---
+
+h1. daycount-0.1.0.js
+
+Backwards-incompatible changes:
+
+* @day@ has been renamed to @moment@, supporting fluency across counts whose days begin and end at different times.
+* @daycount.counts.thoth@ has been renamed to @daycount.counts.venus@.
+
+Added support for counts:
+
+* *Local Julian Day* (@daycount.counts.localJulianDay@)
+* *Mercury Count* (@daycount.counts.mercury@)

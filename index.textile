@@ -9,26 +9,38 @@ This is a demonstration of the <a href="https://github.com/jtacoma/daycount.js">
 
 For example, here is some information about today:
 
-bq. <div id="sample" />
+bq. <div id="today" />
 
 <script type="text/javascript">
-  var today = new daycount.day();
-  document.getElementById('sample').innerHTML =
+  var today = new daycount.moment();
+  document.getElementById('today').innerHTML =
     'Gregorian Calendar: ' + today.gregorian + '<br />' + 
     'Julian Day Number: ' + today.julianDay + '<br />' +
+    'Local Julian Day Number: ' + today.localJulianDay + '<br />' +
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
-    'Thoth: ' + today.thoth;
+    'Venus Count: ' + today.venus + '<br />' +
+    'Mercury Count: ' + today.mercury;
 </script>
 
 Your browser calculated this information in your time zone when it loaded this page.  To add this to another HTML page, just copy and paste this code:
 
-bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.0.js"></script>
-<div id="sample" />
+bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
+<div id="today" />
 <script type="text/javascript">
-  var today = new daycount.day();
-  document.getElementById('sample').innerHTML =
+  var today = new daycount.moment();
+  document.getElementById('today').innerHTML =
     'Gregorian Calendar: ' + today.gregorian + '<br />' + 
     'Julian Day Number: ' + today.julianDay + '<br />' +
+    'Local Julian Day Number: ' + today.localJulianDay + '<br />' +
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
-    'Thoth: ' + today.thoth;
+    'Venus: ' + today.venus + '<br />' +
+    'Mercury: ' + today.mercury;
 </script>
+
+h2. News
+
+<ul class="posts">
+  {% for post in site.posts %}
+    <li><span class="date" title="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_string }}</span> &raquo; <a href="/daycount.js{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>

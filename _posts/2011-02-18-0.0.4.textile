@@ -1,0 +1,8 @@
+---
+layout: post
+category: log
+---
+
+h1. daycount-0.0.4.js
+
+Alright, it's beginning to take form.  Version 0.0.4 is tagged and the demo is working with one more count.  Lots of work still to do, check back here for updates!
