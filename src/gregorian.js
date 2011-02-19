@@ -40,7 +40,9 @@ daycount.counts.gregorian = (function() {
   };
 
   gregorian.prototype.toString = function() {
-    return this.year + '-' + this.month + '-' + this.dayOfMonth;
+    return this.year + '-'
+      + (this.month >= 10 ? this.month : '0' + this.month) + '-'
+      + (this.dayOfMonth >= 10 ? this.dayOfMonth : '0' + this.dayOfMonth);
   };
 
   // Class methods:

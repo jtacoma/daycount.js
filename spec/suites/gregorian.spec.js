@@ -77,6 +77,8 @@ describe("daycount.counts.gregorian", function() {
   it("should have a nice toString()", function () {
     var gregorian = daycount.counts.gregorian.from_Date(example);
     expect(gregorian.toString()).toEqual('2012-12-21');
+    gregorian = daycount.counts.gregorian.from_Date(new Date(2012,0,9));
+    expect(gregorian.toString()).toEqual('2012-01-09');
   });
 
 });
