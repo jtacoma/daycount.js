@@ -8,18 +8,26 @@ describe("daycount.counts.venus", function() {
     expect(daycount.counts.venus.name).toEqual('venus');
   });
 
-  it("should handle conversion from gregorian", function() {
-    expect(daycount.counts.venus.from_gregorian).toBeDefined();
+  it("should handle conversion from local julian day", function() {
+    expect(daycount.counts.venus.from_localJulianDay).toBeDefined();
     var references = [
       {
-        gregorian: example_gregorian,
-        venus: new daycount.counts.venus({year:8,dayOfYear:92}),
+        localJulianDay: new daycount.counts.localJulianDay({number:2453951}),
+        venus: new daycount.counts.venus({year:1,dayOfYear:1}),
+      },
+      {
+        localJulianDay: new daycount.counts.localJulianDay({number:2453952}),
+        venus: new daycount.counts.venus({year:1,dayOfYear:2}),
+      },
+      {
+        localJulianDay: new daycount.counts.localJulianDay({number:2453950}),
+        venus: new daycount.counts.venus({dayOfYear:7}),
       },
     ];
     for(var i = 0; i < references.length; ++i)
     {
       var ref = references[i];
-      var venus = daycount.counts.venus.from_gregorian(ref.gregorian);
+      var venus = daycount.counts.venus.from_localJulianDay(ref.localJulianDay);
       expect(venus.toString()).toEqual(ref.venus.toString());
     }
   });
@@ -36,8 +44,10 @@ describe("daycount.counts.venus", function() {
   });
 
   it("should have a nice toString()", function() {
-    var venus = daycount.counts.venus.from_gregorian(example_gregorian);
-    expect(venus.toString()).toEqual('VC:8/92 (8,14,1)');
+    var venus = daycount.counts.venus.from_localJulianDay(new daycount.counts.localJulianDay({number:2453952}));
+    expect(venus.toString()).toEqual('VC:1/2 (1,1,2)');
+    venus = daycount.counts.venus.from_localJulianDay(new daycount.counts.localJulianDay({number:2453950}));
+    expect(venus.toString()).toEqual('VC:x/7 (x,x,7)');
   });
 
 });

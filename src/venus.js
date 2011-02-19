@@ -7,16 +7,17 @@ daycount.counts.venus = (function() {
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
     this.month = parseInt((this.dayOfYear - 1) / 28) + 1;
     this.dayOfMonth = (this.dayOfYear - 1) % 28 + 1;
-    this.week = parseInt((this.dayOfYear - 1) / 7) + 1;
+    this.week = (this.year ? parseInt((this.dayOfYear - 1) / 7) + 1 : NaN);
     this.dayOfWeek = (this.dayOfYear - 1) % 7 + 1;
   };
 
-  venus.from_gregorian = function (gregorian) {
-    var offset = gregorian.from(new daycount.counts.gregorian({year:2011,month:2,dayOfMonth:17}));
-    var base = (7 * (32 * 7)) + 91;
-    var actual = base + offset;
-    var year = parseInt(actual / (32 * 7)) + 1;
-    var dayOfYear = actual % (32 * 7) + 1;
+  venus.from_localJulianDay = function(localJulianDay) {
+    var fixed = localJulianDay.number - start_jd;
+    var decade0 = Math.floor(fixed / 2247);
+    var dayOfDecade = fixed - (decade0 * 2247);
+    var year = Math.floor(dayOfDecade / 224) + 1;
+    var dayOfYear = dayOfDecade % 224 + 1;
+    if (year == 11) year = NaN;
     return new daycount.counts.venus({
       year: year,
       dayOfYear: dayOfYear,
@@ -24,8 +25,8 @@ daycount.counts.venus = (function() {
   };
 
   venus.prototype.toString = function() {
-    return 'VC:' + this.year + '/' + this.dayOfYear
-      + ' (' + this.year + ',' + this.week + ',' + this.dayOfWeek + ')';
+    return 'VC:' + (this.year || 'x') + '/' + this.dayOfYear
+      + ' (' + (this.year || 'x') + ',' + (this.week || 'x') + ',' + this.dayOfWeek + ')';
   }
 
   return venus;

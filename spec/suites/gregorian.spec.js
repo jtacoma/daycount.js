@@ -17,6 +17,16 @@ describe("daycount.counts.gregorian", function() {
     expect(gregorian.dayOfYear).toEqual(356);
   });
 
+  it("should handle conversion from local julian day number", function() {
+    expect(daycount.counts.gregorian.from_localJulianDay).toBeDefined();
+    var localJulianDay = daycount.counts.localJulianDay.from_Date(example);
+    var gregorian = daycount.counts.gregorian.from_localJulianDay(localJulianDay);
+    expect(gregorian.year).toEqual(2012);
+    expect(gregorian.month).toEqual(12); // January = 1
+    expect(gregorian.dayOfMonth).toEqual(21);
+    expect(gregorian.dayOfYear).toEqual(356);
+  });
+
   it("should show up correctly in new days", function() {
     var moment = new daycount.moment(example);
     expect(moment.gregorian.constructor.name).toEqual('gregorian');

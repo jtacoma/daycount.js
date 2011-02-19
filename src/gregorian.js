@@ -63,5 +63,28 @@ daycount.counts.gregorian = (function() {
     });
   };
 
+  gregorian.from_localJulianDay = function (localJulianDay) {
+    // From Wikipedia's Julian_day article:
+    var J = localJulianDay.number + 0.5;
+    var j = J + 32044;
+    var g = Math.floor(j / 146097);
+    var dg = Math.floor(j) % 146097;
+    var c = Math.floor((Math.floor(dg / 36524) + 1) * 3 / 4);
+    var dc = dg - c * 36524;
+    var b = Math.floor(dc / 1461);
+    var db = dc % 1461;
+    var a = Math.floor((Math.floor(db / 365) + 1) * 3 / 4);
+    var da = db - a * 365;
+    var y = g * 400 + c * 100 + b * 4 + a; // number of full years elapsed since March 1, 4801 BC at 00:00 UTC);
+    var m = Math.floor((Math.floor(da * 5) + 308) / 153) - 2; // number of full months elapsed since the last March 1 at 00:00 UTC);
+    var d = da - Math.floor((m + 4) * 153 / 5) + 122; // number of days elapsed since day 1 of the month at 00:00 UTC, including fractions of one day);
+    var Y = y - 4800 + Math.floor((m + 2) / 12);
+    var M = (m + 2) % 12 + 1;
+    var D = d + 1;
+    return new daycount.counts.gregorian({
+      year: Y, month: M, dayOfMonth: D,
+    });
+  };
+
   return gregorian;
 })();
