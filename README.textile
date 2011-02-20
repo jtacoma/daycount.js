@@ -8,6 +8,7 @@ h1. daycount.js
 * *Venus Count* a 224 day year, including a 7 day leap week every 10 years.
 * *Mars Count* a 687 day year, subdivided into 300, 40, 3, 1, 3, 40, and 300 days (not yet implemented).
 * *Thoth Count* an 88 day year.
+* *Mayan Long Count* with base-20 and base-13 numbering systems.
 
 For some examples of what can be done, see the "demo":http://yellowseed.org/daycount.js/.
 
