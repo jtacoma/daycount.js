@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>daycount.js: explorer</title>
+    <link rel="stylesheet" href="/media/css/reset-fonts-grids.css" />
+    <link rel="stylesheet" href="/media/css/base.css">
+    <style type="text/css">
+      table#data {
+        border-width: 1px;
+        border-style: outset;
+        border-color: gray;
+        border-collapse: separate;
+      }
+      table#data th {
+        border-width: 1px;
+        padding: 1px;
+        border-style: inset;
+        border-color: gray;
+      }
+      table#data td {
+        border-width: 1px;
+        padding: 1px;
+        border-style: inset;
+        border-color: gray;
+      }
+      table#data tr.odd {
+        background: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="doc3">
+      <div id="hd">
+        <p>
+          Input a starting date and a number of days forward to calculate.
+          The date must be specified in the Gregorian (e.g. 2012-12-21), local Julian Day (e.g. LJD:2456283), or Long (e.g. 13.0.0.0.0) count.
+          The number of days to calculate is capped at 1000 to keep your browser from becoming unresponsive (it's performing these calculations on your computer).
+          Please report bugs and inaccuracies, suggest new features, or comment on others' suggestions
+          in the <a href="https://github.com/jtacoma/daycount.js">issue tracker</a>,
+          or just <a href="mailto:joshua@yellowseed.org">email me</a>.
+        </p>
+        <input id="start" /><label for="days">+</label><input id="days" />
+      </div>
+      <div id="bd">
+        <table id="data" width="700em">
+          <thead>
+            <tr>
+              <th width="10%">Gregorian</th>
+              <th width="10%">Julian Day</th>
+              <th width="10%">Dreamspell</th>
+              <th width="10%">Venus</th>
+              <th width="10%">Mars</th>
+              <th width="10%">Thoth</th>
+              <th width="10%">Long</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div id="ft">
+      </div>
+    </div>
+    <script src="../media/js/jquery.js"></script>
+    <script src="../media/js/jquery.dataTables.js"></script>
+    <script src="/daycount.js/js/daycount.js"></script>
+    <script type="text/javascript">
+      var today = new daycount.moment();
+      function update_day_list() {
+        var start = new daycount.moment($('#start').val());
+        if (start.isUnknown) return;
+        var days = parseInt($('#days').val());
+        var table = calendar_days(start, (days > 1000 ? 1000 : days));
+        return table;
+      }
+      function calendar_days(start, days) {
+        var day = start;
+        var data = [];
+        for (var i = 0; i < days; i += 1)
+        {
+          data.push([
+            day.gregorian,
+            day.localJulianDay,
+            day.dreamspell,
+	    day.venus,
+	    day.mars,
+	    day.thoth,
+            day.long,
+          ]);
+          day.increment(1);
+        }
+        if (table)
+          table.fnDestroy();
+        var table = jQuery('#data').dataTable({
+          bAutoWidth: false,
+          bDestroy: true,
+          bFilter: false,
+          bInfo: false,
+          bPaginate: false,
+          aaData: data,
+        });
+        return table;
+      }
+      $(function() {
+        var table = jQuery('#data').dataTable({
+          bAutoWidth: false,
+          bDelete: true,
+          bFilter: false,
+          bInfo: false,
+          bPaginate: false,
+        });
+        table = update_day_list(table) || table;
+        $('#hd input').change(function() {
+          update_day_list();
+        });
+      });
+    </script>
+  </body>
+</html>

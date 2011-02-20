@@ -1,0 +1,24 @@
+---
+layout: post
+category: log
+---
+
+h1. daycount-0.1.2.js
+
+Well, this makes it two releases in one day - quite a pace, though probably not abnormal so early in a project.  Development will probably slow down soon as the basic features are nearly all implemented.
+
+Backwards-incompatible changes:
+
+* @mars@ has an improved @toString()@ that includes more detailed information.
+
+Added support for counts:
+
+* *Long Count* (@daycount.counts.long@)
+
+The following counts can now be recognized in text:
+
+* Gregorian e.g. *2012-12-21*
+* Local Julian Day e.g. *LJD:2456283*
+* Long Count e.g. *13.0.0.0.0*
+
+A new demo, *explorer*, has been added, or rather copied from it's previous home outside of this project.

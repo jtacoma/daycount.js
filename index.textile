@@ -20,7 +20,8 @@ bq. <div id="today" />
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
     'Venus Count: ' + today.venus + '<br />' +
     'Mars Count: ' + today.mars + '<br />' +
-    'Thoth Count: ' + today.thoth;
+    'Thoth Count: ' + today.thoth + '<br />' +
+    'Long Count: ' + today.long;
 </script>
 
 Your browser calculated this information in your time zone when it loaded this page.  To add this to another HTML page, just copy and paste this code:
@@ -36,8 +37,11 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
     'Venus Count: ' + today.venus + '<br />' +
     'Mars Count: ' + today.mars + '<br />' +
-    'Thoth Count: ' + today.thoth;
+    'Thoth Count: ' + today.thoth + '<br />' +
+    'Long Count: ' + today.long;
 </script>
+
+For a more interesting and interactive demo, see "explorer":explorer.html
 
 h2. Log
 

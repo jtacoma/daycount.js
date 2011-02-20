@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.1
+ * daycount.js v0.1.2
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -8,8 +8,8 @@
  *
  */
 
-// All other globals defined in this module are stored within this object:
-var daycount = {};
+// All other globals defined here are kept in this object:
+var daycount = (typeof exports !== 'undefined' && exports !== null) ? exports : {};
 
 // The 'moment' type, which may include associated information from any calendar system:
 daycount.moment = (function() {
@@ -39,6 +39,9 @@ daycount.moment = (function() {
     var done = [arg.constructor.name];
     // TODO: make sure that no item in 'done' is also in 'todo'.
 
+    if (!(arg.constructor.name in daycount.counts))
+      this.isUnknown = true;
+
     // Store argument as the only known property of this:
     this[arg.constructor.name] = arg;
 
@@ -63,12 +66,16 @@ daycount.moment = (function() {
           var builderNameTodo = 'from_' + nameDone;
           if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
 
-          // Found one!  Calculate the value for 'countTodo' and remove
-          // it from 'done':
+          // Found one!  Calculate the value for 'countTodo':
           var builder = countTodo[builderNameTodo];
+          var built = builder(this[nameDone]);
+          if(built === null) continue;
+
           this[nameTodo] = builder(this[nameDone]);
           done.push(nameTodo);
           todo.splice(indexTodo, 1)
+          if('isUnknown' in this)
+            delete this['isUnknown'];
 
           // Since we've just calculated another count, any remaining
           // counts must be recalculated, meaning we're not finished:
@@ -102,7 +109,7 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 1,
+  build: 2,
 };
 
 daycount.counts.dreamspell = (function () {
@@ -247,6 +254,18 @@ daycount.counts.gregorian = (function() {
     });
   };
 
+  gregorian.from_String = function (string) {
+    var match = (/(-?\d+)-(\d\d)-(\d\d)/).exec(string);
+    if (!match) return null;
+    var month = match[2][0] == '0' ? match[2][1] : match[2];
+    var dayOfMonth = match[3][0] == '0' ? match[3][1] : match[3];
+    return new daycount.counts.gregorian({
+      year: parseInt(match[1]),
+      month: parseInt(month),
+      dayOfMonth: parseInt(dayOfMonth),
+    });
+  };
+
   return gregorian;
 })();
 /**
@@ -289,7 +308,7 @@ daycount.counts.julianDay = (function() {
 daycount.counts.localJulianDay = (function() {
 
   function localJulianDay(arg) {
-    if(typeof(arg) == 'object') arg = arg.number;
+    if(typeof(arg) == 'object') arg = parseInt(arg && arg.number);
     this.number = parseInt(arg);
   };
 
@@ -331,7 +350,67 @@ daycount.counts.localJulianDay = (function() {
     });
   };
 
+  localJulianDay.from_long = function(long) {
+    var number = 584283 + long.kin + 20 * long.winal + 360 * long.tun
+      + 7200 * long.katun + 144000 * long.baktun;
+    return new daycount.counts.localJulianDay(number);
+  };
+
+  localJulianDay.from_String = function(string) {
+    var match = (/LJD:(\d+)/).exec(string);
+    if (!match) return null;
+    return new daycount.counts.localJulianDay(parseInt(match[1]));
+  };
+
   return localJulianDay;
+})();
+daycount.counts.long = (function() {
+
+  var start_jd = 584283;
+
+  function long(arg) {
+    this.baktun = parseInt(arg && arg.baktun);
+    this.katun = parseInt(arg && arg.katun);
+    this.tun = parseInt(arg && arg.tun);
+    this.winal = parseInt(arg && arg.winal);
+    this.kin = parseInt(arg && arg.kin);
+  };
+
+  long.prototype.toString = function() {
+    return this.baktun + '.' + this.katun + '.' + this.tun + '.' + this.winal + '.' + this.kin;
+  };
+
+  long.pattern = /(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)/;
+
+  long.from_localJulianDay = function(localJulianDay) {
+    var days = localJulianDay.number - start_jd;
+    var kin = days % 20;
+    var winal = Math.floor(((days - kin) % 360) / 20);
+    var tun = Math.floor(((days - kin - winal * 20) % 7200) / 360);
+    var katun = Math.floor(((days - kin - winal * 20 - tun * 360) % 144000) / 7200);
+    var baktun = Math.floor(((days - kin - winal * 20 - tun * 360 - katun * 7200) % (20 * 144000)) / 144000);
+    return new daycount.counts.long({
+      baktun: baktun,
+      katun: katun,
+      tun: tun,
+      winal: winal,
+      kin: kin,
+    });
+  };
+
+  long.from_String = function(string) {
+    var match = (long.pattern).exec(string);
+    if (!match) return null;
+    return new daycount.counts.long({
+      baktun: parseInt(match[1]),
+      katun: parseInt(match[2]),
+      tun: parseInt(match[3]),
+      winal: parseInt(match[4]),
+      kin: parseInt(match[5]),
+    });
+  };
+
+  return long;
 })();
 daycount.counts.mars = (function() {
 
@@ -340,6 +419,13 @@ daycount.counts.mars = (function() {
   function mars(arg) {
     this.year = parseInt(arg && arg.year);
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
+    this.ascent = this.dayOfYear <= 300 ? this.dayOfYear : NaN;
+    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340 ? this.dayOfYear - 300 : NaN;
+    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343 ? this.dayOfYear - 340 : NaN;
+    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344 ? this.dayOfYear - 343 : NaN;
+    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347 ? this.dayOfYear - 344 : NaN;
+    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387 ? this.dayOfYear - 347 : NaN;
+    this.descent = 387 < this.dayOfYear ? this.dayOfYear - 387 : NaN;
   };
 
   mars.from_localJulianDay = function(localJulianDay) {
@@ -354,7 +440,15 @@ daycount.counts.mars = (function() {
   };
 
   mars.prototype.toString = function() {
-    return 'MC:' + (this.year || 'x') + '/' + this.dayOfYear;
+    return 'MC:' + (this.year || 'x') + '/' + this.dayOfYear +
+      ' (' + (this.year || 'x') + ':' +
+         (this.ascent ? this.ascent : 'x/' +
+          (this.firstfour ? this.firstfour : 'x/' +
+           (this.firstthree ? this.firstthree : 'x/' +
+            (this.one ? this.one : 'x/' +
+             (this.secondthree ? this.secondthree : 'x/' +
+              (this.secondfour ? this.secondfour : 'x/' +
+               this.descent)))))) + ')';
   }
 
   return mars;
