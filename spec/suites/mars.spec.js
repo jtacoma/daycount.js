@@ -41,13 +41,13 @@ describe("daycount.counts.mars", function() {
 
   it("should have a nice toString()", function() {
     var mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453690}));
-    expect(mars.toString()).toEqual('MC:1/1');
-    var mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453690+686}));
-    expect(mars.toString()).toEqual('MC:1/687');
-    var mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453690+688}));
-    expect(mars.toString()).toEqual('MC:2/2');
+    expect(mars.toString()).toEqual('MC:1/1 (1:1)');
+    mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453690+686}));
+    expect(mars.toString()).toEqual('MC:1/687 (1:x/x/x/x/x/x/300)');
+    mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453690+688}));
+    expect(mars.toString()).toEqual('MC:2/2 (2:2)');
     mars = daycount.counts.mars.from_localJulianDay(new daycount.counts.localJulianDay({number:2453689}));
-    expect(mars.toString()).toEqual('MC:x/687');
+    expect(mars.toString()).toEqual('MC:x/687 (x:x/x/x/x/x/x/300)');
   });
 
 });

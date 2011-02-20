@@ -5,6 +5,13 @@ daycount.counts.mars = (function() {
   function mars(arg) {
     this.year = parseInt(arg && arg.year);
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
+    this.ascent = this.dayOfYear <= 300 ? this.dayOfYear : NaN;
+    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340 ? this.dayOfYear - 300 : NaN;
+    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343 ? this.dayOfYear - 340 : NaN;
+    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344 ? this.dayOfYear - 343 : NaN;
+    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347 ? this.dayOfYear - 344 : NaN;
+    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387 ? this.dayOfYear - 347 : NaN;
+    this.descent = 387 < this.dayOfYear ? this.dayOfYear - 387 : NaN;
   };
 
   mars.from_localJulianDay = function(localJulianDay) {
@@ -19,7 +26,15 @@ daycount.counts.mars = (function() {
   };
 
   mars.prototype.toString = function() {
-    return 'MC:' + (this.year || 'x') + '/' + this.dayOfYear;
+    return 'MC:' + (this.year || 'x') + '/' + this.dayOfYear +
+      ' (' + (this.year || 'x') + ':' +
+         (this.ascent ? this.ascent : 'x/' +
+          (this.firstfour ? this.firstfour : 'x/' +
+           (this.firstthree ? this.firstthree : 'x/' +
+            (this.one ? this.one : 'x/' +
+             (this.secondthree ? this.secondthree : 'x/' +
+              (this.secondfour ? this.secondfour : 'x/' +
+               this.descent)))))) + ')';
   }
 
   return mars;
