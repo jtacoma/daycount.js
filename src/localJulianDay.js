@@ -43,6 +43,12 @@ daycount.counts.localJulianDay = (function() {
     });
   };
 
+  localJulianDay.from_long = function(long) {
+    var number = 584283 + long.kin + 20 * long.winal + 360 * long.tun
+      + 7200 * long.katun + 144000 * long.baktun;
+    return new daycount.counts.localJulianDay(number);
+  };
+
   localJulianDay.from_String = function(string) {
     var match = (/LJD:(\d+)/).exec(string);
     if (!match) return null;

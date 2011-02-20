@@ -17,6 +17,12 @@ describe("daycount.counts.localJulianDay", function() {
     expect(localJulianDay.number).toEqual(2456283);
   });
 
+  it("should handle conversion from long count", function() {
+    var long = daycount.counts.long.from_String('13.0.0.0.0');
+    var localJulianDay = daycount.counts.localJulianDay.from_long(long);
+    expect(localJulianDay.number).toEqual(2456283);
+  });
+
   it("should handle conversion from string", function() {
     var localJulianDay = daycount.counts.localJulianDay.from_String('LJD:2456283');
     expect(localJulianDay.number).toEqual(2456283);
