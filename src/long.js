@@ -19,10 +19,10 @@ daycount.counts.long = (function() {
   long.from_localJulianDay = function(localJulianDay) {
     var days = localJulianDay.number - start_jd;
     var kin = days % 20;
-    var winal = (days - kin) % 360;
-    var tun = (days - kin - winal * 20) % 7200;
-    var katun = (days - kin - winal * 20 - tun * 360) % 144000;
-    var baktun = (days - kin - winal * 20 - tun * 360 - katun * 7200) % (20 * 144000);
+    var winal = Math.floor(((days - kin) % 360) / 20);
+    var tun = Math.floor(((days - kin - winal * 20) % 7200) / 360);
+    var katun = Math.floor(((days - kin - winal * 20 - tun * 360) % 144000) / 7200);
+    var baktun = Math.floor(((days - kin - winal * 20 - tun * 360 - katun * 7200) % (20 * 144000)) / 144000);
     return new daycount.counts.long({
       baktun: baktun,
       katun: katun,
