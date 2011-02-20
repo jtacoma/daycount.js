@@ -39,7 +39,7 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
     'Thoth Count: ' + today.thoth;
 </script>
 
-h2. News
+h2. Log
 
 <ul class="posts">
   {% for post in site.posts %}
