@@ -5,7 +5,7 @@ category: log
 
 h1. daycount-0.1.2.js
 
-Well, this makes it two releases in one day - quite a pace, though probably not abnormal so early in a project.  Development will probably slow down soon as the basic features are nearly all implemented.
+This makes it two releases in one day - quite a pace, though not abnormal so early in a project.  Development will slow down soon as the basic features are nearly all implemented and the weekend is nearly over...
 
 Backwards-incompatible changes:
 
