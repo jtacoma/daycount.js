@@ -1,0 +1,19 @@
+---
+layout: post
+category: log
+---
+
+h1. daycount-0.1.1.js
+
+Backwards-incompatible changes:
+
+* @mercury@ has been renamed to @mars@, since it was named incorrectly in code.
+* @daycount.counts.gregorian@ has an improved @toString()@ that zero-pads month and day numbers to keep them two characters long.
+
+Added support for counts:
+
+* *Thoth Count* (@daycount.counts.thoth@)
+
+Coming soon:
+
+* Recognize date strings and parse them into corresponding counts.

@@ -19,7 +19,8 @@ bq. <div id="today" />
     'Local Julian Day Number: ' + today.localJulianDay + '<br />' +
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
     'Venus Count: ' + today.venus + '<br />' +
-    'Mercury Count: ' + today.mercury;
+    'Mars Count: ' + today.mars + '<br />' +
+    'Thoth Count: ' + today.thoth;
 </script>
 
 Your browser calculated this information in your time zone when it loaded this page.  To add this to another HTML page, just copy and paste this code:
@@ -33,8 +34,9 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
     'Julian Day Number: ' + today.julianDay + '<br />' +
     'Local Julian Day Number: ' + today.localJulianDay + '<br />' +
     'Dreamspell Calendar: ' + today.dreamspell + '<br />' +
-    'Venus: ' + today.venus + '<br />' +
-    'Mercury: ' + today.mercury;
+    'Venus Count: ' + today.venus + '<br />' +
+    'Mars Count: ' + today.mars + '<br />' +
+    'Thoth Count: ' + today.thoth;
 </script>
 
 h2. News

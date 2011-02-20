@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.0
+ * daycount.js v0.1.1
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -102,7 +102,7 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 0,
+  build: 1,
 };
 
 daycount.counts.dreamspell = (function () {
@@ -199,7 +199,9 @@ daycount.counts.gregorian = (function() {
   };
 
   gregorian.prototype.toString = function() {
-    return this.year + '-' + this.month + '-' + this.dayOfMonth;
+    return this.year + '-'
+      + (this.month >= 10 ? this.month : '0' + this.month) + '-'
+      + (this.dayOfMonth >= 10 ? this.dayOfMonth : '0' + this.dayOfMonth);
   };
 
   // Class methods:
@@ -331,31 +333,57 @@ daycount.counts.localJulianDay = (function() {
 
   return localJulianDay;
 })();
-daycount.counts.mercury = (function() {
+daycount.counts.mars = (function() {
 
   var start_jd = 2453690;
 
-  function mercury(arg) {
+  function mars(arg) {
     this.year = parseInt(arg && arg.year);
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
   };
 
-  mercury.from_localJulianDay = function(localJulianDay) {
+  mars.from_localJulianDay = function(localJulianDay) {
     var fixed = localJulianDay.number - start_jd;
     var year0 = Math.floor(fixed / 687);
     var dayOfYear = fixed - (year0 * 687) + 1;
     var year = (year0 >= 0) ? year0 + 1 : NaN;
-    return new daycount.counts.mercury({
+    return new daycount.counts.mars({
       year: year,
       dayOfYear: dayOfYear,
     });
   };
 
-  mercury.prototype.toString = function() {
+  mars.prototype.toString = function() {
     return 'MC:' + (this.year || 'x') + '/' + this.dayOfYear;
   }
 
-  return mercury;
+  return mars;
+})();
+daycount.counts.thoth = (function() {
+
+  var start_jd = 2452993;
+
+  function thoth(arg) {
+    this.year = parseInt(arg && arg.year);
+    this.dayOfYear = parseInt(arg && arg.dayOfYear);
+  };
+
+  thoth.from_localJulianDay = function(localJulianDay) {
+    var fixed = localJulianDay.number - start_jd;
+    var year0 = Math.floor(fixed / 88);
+    var dayOfYear = fixed - (year0 * 88) + 1;
+    var year = (year0 >= 0) ? year0 + 1 : NaN;
+    return new daycount.counts.thoth({
+      year: year,
+      dayOfYear: dayOfYear,
+    });
+  };
+
+  thoth.prototype.toString = function() {
+    return 'TC:' + (this.year || 'x') + '/' + this.dayOfYear;
+  }
+
+  return thoth;
 })();
 daycount.counts.venus = (function() {
 
