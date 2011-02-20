@@ -27,6 +27,19 @@ describe("daycount.counts.gregorian", function() {
     expect(gregorian.dayOfYear).toEqual(356);
   });
 
+  it("should handle conversion from string", function() {
+    expect(daycount.counts.gregorian.from_String).toBeDefined();
+    var gregorian = daycount.counts.gregorian.from_String('2012-12-21');
+    expect(gregorian.year).toEqual(2012);
+    expect(gregorian.month).toEqual(12);
+    expect(gregorian.dayOfMonth).toEqual(21);
+    expect(gregorian.dayOfYear).toEqual(356);
+    var gregorian = daycount.counts.gregorian.from_String('-3114-08-11');
+    expect(gregorian.year).toEqual(-3114);
+    expect(gregorian.month).toEqual(8);
+    expect(gregorian.dayOfMonth).toEqual(11);
+  });
+
   it("should show up correctly in new days", function() {
     var moment = new daycount.moment(example);
     expect(moment.gregorian.constructor.name).toEqual('gregorian');

@@ -88,5 +88,17 @@ daycount.counts.gregorian = (function() {
     });
   };
 
+  gregorian.from_String = function (string) {
+    var match = (/(-?\d+)-(\d\d)-(\d\d)/).exec(string);
+    if (!match) return null;
+    var month = match[2][0] == '0' ? match[2][1] : match[2];
+    var dayOfMonth = match[3][0] == '0' ? match[3][1] : match[3];
+    return new daycount.counts.gregorian({
+      year: parseInt(match[1]),
+      month: parseInt(month),
+      dayOfMonth: parseInt(dayOfMonth),
+    });
+  };
+
   return gregorian;
 })();

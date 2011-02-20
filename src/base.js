@@ -8,8 +8,8 @@
  *
  */
 
-// All other globals defined in this module are stored within this object:
-var daycount = {};
+// All other globals defined here are kept in this object:
+var daycount = (typeof exports !== 'undefined' && exports !== null) ? exports : {};
 
 // The 'moment' type, which may include associated information from any calendar system:
 daycount.moment = (function() {
@@ -63,9 +63,11 @@ daycount.moment = (function() {
           var builderNameTodo = 'from_' + nameDone;
           if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
 
-          // Found one!  Calculate the value for 'countTodo' and remove
-          // it from 'done':
+          // Found one!  Calculate the value for 'countTodo':
           var builder = countTodo[builderNameTodo];
+          var built = builder(this[nameDone]);
+          if(built === null) continue;
+
           this[nameTodo] = builder(this[nameDone]);
           done.push(nameTodo);
           todo.splice(indexTodo, 1)

@@ -1,7 +1,7 @@
 daycount.counts.localJulianDay = (function() {
 
   function localJulianDay(arg) {
-    if(typeof(arg) == 'object') arg = arg.number;
+    if(typeof(arg) == 'object') arg = parseInt(arg && arg.number);
     this.number = parseInt(arg);
   };
 
@@ -41,6 +41,12 @@ daycount.counts.localJulianDay = (function() {
     return new daycount.counts.localJulianDay({
       number: number,
     });
+  };
+
+  localJulianDay.from_String = function(string) {
+    var match = (/LJD:(\d+)/).exec(string);
+    if (!match) return null;
+    return new daycount.counts.localJulianDay(parseInt(match[1]));
   };
 
   return localJulianDay;
