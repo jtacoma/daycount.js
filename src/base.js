@@ -39,6 +39,9 @@ daycount.moment = (function() {
     var done = [arg.constructor.name];
     // TODO: make sure that no item in 'done' is also in 'todo'.
 
+    if (!(arg.constructor.name in daycount.counts))
+      this.isUnknown = true;
+
     // Store argument as the only known property of this:
     this[arg.constructor.name] = arg;
 
@@ -71,6 +74,8 @@ daycount.moment = (function() {
           this[nameTodo] = builder(this[nameDone]);
           done.push(nameTodo);
           todo.splice(indexTodo, 1)
+          if('isUnknown' in this)
+            delete this['isUnknown'];
 
           // Since we've just calculated another count, any remaining
           // counts must be recalculated, meaning we're not finished:

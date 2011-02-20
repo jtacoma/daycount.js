@@ -21,6 +21,7 @@ describe("daycount.moment", function() {
     expect(moment.gregorian.dayOfMonth).toEqual(21);
     var moment = new daycount.moment('not a date of any kind');
     expect(moment.gregorian).toBeUndefined();
+    expect(moment.isUnknown).toBeTruthy();
   });
 
 });
