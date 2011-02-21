@@ -6,12 +6,6 @@ describe("daycount (base)", function() {
     expect(daycount.version_.major).toBeDefined();
   });
 
-  it("should have a well-formed moment class", function() {
-    expect(daycount.moment).toBeDefined();
-    expect(daycount.moment.prototype).toBeDefined();
-    expect(new daycount.moment().constructor.name).toEqual('moment');
-  });
-
   it("should have a list of counts", function() {
     expect(daycount.counts).toBeDefined();
   });

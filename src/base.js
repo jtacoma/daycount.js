@@ -65,7 +65,7 @@ daycount.moment = (function() {
         var built = builder(this[nameDone]);
         if(built === null) continue;
 
-        this[nameTodo] = builder(this[nameDone]);
+        this[nameTodo] = built;
         done.push(nameTodo);
         todo.splice(indexTodo, 1)
         if('isUnknown' in this)
@@ -74,18 +74,14 @@ daycount.moment = (function() {
     }
   };
 
-  moment.prototype.incrementEarthSolarDays = function(days) {
-    if (this['Date'])
-      this.set(new Date(this.Date.getFullYear(), this.Date.getMonth(), this.Date.getDate() + days));
-    else if (this['gregorian'])
-      this.set(this.gregorian.plusDays(days));
-    else if(this['julianDay'])
-      this.set(this.julianDay.plusDays(days));
+  moment.prototype.plusEarthSolarDays = function(days) {
+    if('localJulianDay' in this)
+      return new moment(new daycount.counts.localJulianDay(this.localJulianDay.number + days));
     else
       throw 'this moment has no counts that support the specified increment.';
   };
 
-  moment.prototype.increment = moment.prototype.incrementEarthSolarDays;
+  moment.prototype.plus = moment.prototype.plusEarthSolarDays;
 
   return moment;
 })();

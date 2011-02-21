@@ -7,7 +7,7 @@ function for_each(start, days, predicate, action) {
   for(var i = 0; i < days; ++i) {
     if(predicate(moment))
       action(moment);
-    moment.increment(1);
+    moment = moment.plus(1);
   }
   sys.puts('done: '); print_moment(moment);
 }

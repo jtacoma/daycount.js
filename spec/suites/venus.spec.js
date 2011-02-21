@@ -23,6 +23,10 @@ describe("daycount.counts.venus", function() {
         localJulianDay: new daycount.counts.localJulianDay({number:2453950}),
         venus: new daycount.counts.venus({year:-1,dayOfYear:231}),
       },
+      {
+        localJulianDay: new daycount.counts.localJulianDay({number:2456198}),
+        venus: new daycount.counts.venus({year:11,dayOfYear:1}),
+      },
     ];
     for(var i = 0; i < references.length; ++i)
     {

@@ -19,8 +19,8 @@ daycount.counts.venus = (function() {
     var yearOfDecade = Math.floor(dayOfDecade / 224) + 1;
     var dayOfYear = dayOfDecade % 224 + 1;
     if (yearOfDecade == 11) { yearOfDecade -= 1; dayOfYear += 224; }
-    var year = decade0 * 11 + yearOfDecade;
-    //if (year >= 0) year += 1;
+    var year = decade0 * 10 + yearOfDecade - 1;
+    if (year >= 0) year += 1;
     return new daycount.counts.venus({
       year: year,
       dayOfYear: dayOfYear,

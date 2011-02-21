@@ -50,7 +50,7 @@ daycount.counts.localJulianDay = (function() {
   };
 
   localJulianDay.from_String = function(string) {
-    var match = (/LJD:(\d+)/).exec(string);
+    var match = (/[Ll][Jj][Dd]:(\d+)/).exec(string);
     if (!match) return null;
     return new daycount.counts.localJulianDay(parseInt(match[1]));
   };
