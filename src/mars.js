@@ -18,11 +18,21 @@ daycount.counts.mars = (function() {
     var fixed = localJulianDay.number - start_jd;
     var year0 = Math.floor(fixed / 687);
     var dayOfYear = fixed - (year0 * 687) + 1;
-    var year = (year0 >= 0) ? year0 + 1 : NaN;
+    var year = (year0 >= 0) ? year0 + 1 : year0;
     return new daycount.counts.mars({
       year: year,
       dayOfYear: dayOfYear,
     });
+  };
+
+  mars.pattern = /[Mm][Cc]:?(-?[1-9]\d*)\/(\d+)/;
+
+  mars.from_String = function(string) {
+    var match = mars.pattern.exec(string);
+    if (!match) return null;
+    var year = parseInt(match[1]);
+    var dayOfYear = parseInt(match[2]);
+    return new mars({year:year,dayOfYear:dayOfYear});
   };
 
   mars.prototype.toString = function() {
