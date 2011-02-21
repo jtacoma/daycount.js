@@ -45,12 +45,11 @@ daycount.moment = (function() {
     // Store argument as the only known property of this:
     this[arg.constructor.name] = arg;
 
-    var finished = false;
-    while(!finished) {
-
-      // Assume that there is nothing left to do, then try to prove
-      // that assumption incorrect:
-      finished = true;
+    // Iterate through counts in 'done'.  We're going to add to this list as we
+    // go, which makes this for loop a little more interesting:
+    for (var indexDone = 0; indexDone < done.length && todo.length > 0; ++indexDone) {
+      var nameDone = done[indexDone];
+      var builderNameTodo = 'from_' + nameDone;
 
       // Iterate through counts in 'todo'.  Since we're going to remove
       // them as we go, iterate backwards to keep remaining indices
@@ -59,45 +58,30 @@ daycount.moment = (function() {
         var nameTodo = todo[indexTodo];
         var countTodo = daycount.counts[nameTodo];
 
-        // Iterate through known counts in 'done', looking for something
-        // we can calculate 'countTodo' from:
-        for (var indexDone = 0; indexDone < done.length; ++indexDone) {
-          var nameDone = done[indexDone];
-          var builderNameTodo = 'from_' + nameDone;
-          if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
+        if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
 
-          // Found one!  Calculate the value for 'countTodo':
-          var builder = countTodo[builderNameTodo];
-          var built = builder(this[nameDone]);
-          if(built === null) continue;
+        // Found one!  Calculate the value for 'countTodo':
+        var builder = countTodo[builderNameTodo];
+        var built = builder(this[nameDone]);
+        if(built === null) continue;
 
-          this[nameTodo] = builder(this[nameDone]);
-          done.push(nameTodo);
-          todo.splice(indexTodo, 1)
-          if('isUnknown' in this)
-            delete this['isUnknown'];
-
-          // Since we've just calculated another count, any remaining
-          // counts must be recalculated, meaning we're not finished:
-          finished = false;
-          break;
-        }
+        this[nameTodo] = built;
+        done.push(nameTodo);
+        todo.splice(indexTodo, 1)
+        if('isUnknown' in this)
+          delete this['isUnknown'];
       }
     }
   };
 
-  moment.prototype.incrementEarthSolarDays = function(days) {
-    if (this['Date'])
-      this.set(new Date(this.Date.getFullYear(), this.Date.getMonth(), this.Date.getDate() + days));
-    else if (this['gregorian'])
-      this.set(this.gregorian.plusDays(days));
-    else if(this['julianDay'])
-      this.set(this.julianDay.plusDays(days));
+  moment.prototype.plusEarthSolarDays = function(days) {
+    if('localJulianDay' in this)
+      return new moment(new daycount.counts.localJulianDay(this.localJulianDay.number + days));
     else
       throw 'this moment has no counts that support the specified increment.';
   };
 
-  moment.prototype.increment = moment.prototype.incrementEarthSolarDays;
+  moment.prototype.plus = moment.prototype.plusEarthSolarDays;
 
   return moment;
 })();
@@ -357,7 +341,7 @@ daycount.counts.localJulianDay = (function() {
   };
 
   localJulianDay.from_String = function(string) {
-    var match = (/LJD:(\d+)/).exec(string);
+    var match = (/[Ll][Jj][Dd]:(\d+)/).exec(string);
     if (!match) return null;
     return new daycount.counts.localJulianDay(parseInt(match[1]));
   };
@@ -432,11 +416,21 @@ daycount.counts.mars = (function() {
     var fixed = localJulianDay.number - start_jd;
     var year0 = Math.floor(fixed / 687);
     var dayOfYear = fixed - (year0 * 687) + 1;
-    var year = (year0 >= 0) ? year0 + 1 : NaN;
+    var year = (year0 >= 0) ? year0 + 1 : year0;
     return new daycount.counts.mars({
       year: year,
       dayOfYear: dayOfYear,
     });
+  };
+
+  mars.pattern = /[Mm][Cc]:?(-?[1-9]\d*)\/(\d+)/;
+
+  mars.from_String = function(string) {
+    var match = mars.pattern.exec(string);
+    if (!match) return null;
+    var year = parseInt(match[1]);
+    var dayOfYear = parseInt(match[2]);
+    return new mars({year:year,dayOfYear:dayOfYear});
   };
 
   mars.prototype.toString = function() {
@@ -466,15 +460,25 @@ daycount.counts.thoth = (function() {
     var fixed = localJulianDay.number - start_jd;
     var year0 = Math.floor(fixed / 88);
     var dayOfYear = fixed - (year0 * 88) + 1;
-    var year = (year0 >= 0) ? year0 + 1 : NaN;
+    var year = (year0 >= 0) ? year0 + 1 : year0;
     return new daycount.counts.thoth({
       year: year,
       dayOfYear: dayOfYear,
     });
   };
 
+  thoth.pattern = /[Tt][Cc]:?(-?[1-9]\d*)\/(\d+)/;
+
+  thoth.from_String = function(string) {
+    var match = thoth.pattern.exec(string);
+    if (!match) return null;
+    var year = parseInt(match[1]);
+    var dayOfYear = parseInt(match[2]);
+    return new thoth({year:year,dayOfYear:dayOfYear});
+  };
+
   thoth.prototype.toString = function() {
-    return 'TC:' + (this.year || 'x') + '/' + this.dayOfYear;
+    return 'TC:' + this.year + '/' + this.dayOfYear;
   }
 
   return thoth;
@@ -485,10 +489,11 @@ daycount.counts.venus = (function() {
 
   function venus(arg) {
     this.year = parseInt(arg && arg.year);
+    this.yearOfDecade = (this.year > 0) ? (this.year - 1) % 10 + 1 : this.year % 10 + 11;
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
-    this.month = parseInt((this.dayOfYear - 1) / 28) + 1;
+    this.month = Math.floor((this.dayOfYear - 1) / 28) + 1;
     this.dayOfMonth = (this.dayOfYear - 1) % 28 + 1;
-    this.week = (this.year ? parseInt((this.dayOfYear - 1) / 7) + 1 : NaN);
+    this.week = (this.year ? Math.floor((this.dayOfYear - 1) / 7) + 1 : NaN);
     this.dayOfWeek = (this.dayOfYear - 1) % 7 + 1;
   };
 
@@ -496,18 +501,34 @@ daycount.counts.venus = (function() {
     var fixed = localJulianDay.number - start_jd;
     var decade0 = Math.floor(fixed / 2247);
     var dayOfDecade = fixed - (decade0 * 2247);
-    var year = Math.floor(dayOfDecade / 224) + 1;
+    var yearOfDecade = Math.floor(dayOfDecade / 224) + 1;
     var dayOfYear = dayOfDecade % 224 + 1;
-    if (year == 11) year = NaN;
+    if (yearOfDecade == 11) { yearOfDecade -= 1; dayOfYear += 224; }
+    var year = decade0 * 10 + yearOfDecade - 1;
+    if (year >= 0) year += 1;
     return new daycount.counts.venus({
       year: year,
       dayOfYear: dayOfYear,
     });
   };
 
+  venus.pattern = /[Vv][Cc]:?(-?[1-9]\d*)\/(\d+)(\+[1-7])?/;
+
+  venus.from_String = function(string) {
+    var match = venus.pattern.exec(string);
+    if (!match) return null;
+    var year = parseInt(match[1]);
+    var dayOfYear = parseInt(match[2]) + (match[3] ? parseInt(match[3]) : 0);
+    return new venus({year:year,dayOfYear:dayOfYear});
+  };
+
   venus.prototype.toString = function() {
-    return 'VC:' + (this.year || 'x') + '/' + this.dayOfYear
-      + ' (' + (this.year || 'x') + ',' + (this.week || 'x') + ',' + this.dayOfWeek + ')';
+    return 'VC:' + (this.year || 'x') + '/'
+      + (this.dayOfYear <= 224 ? this.dayOfYear : '224+' + this.dayOfWeek)
+      + ' (' + (this.dayOfYear <= 224
+        ? (this.yearOfDecade + ',' + (this.week || 'x') + ',' + this.dayOfWeek)
+        : ('\u221E,' + this.dayOfWeek))
+      + ')';
   }
 
   return venus;
