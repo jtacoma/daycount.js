@@ -23,6 +23,24 @@ describe("daycount.counts.localJulianDay", function() {
     expect(localJulianDay.number).toEqual(2456283);
   });
 
+  it("should handle conversion from venus count", function() {
+    var venus = new daycount.counts.venus({year:11,dayOfYear:86});
+    var localJulianDay = daycount.counts.localJulianDay.from_venus(venus);
+    expect(localJulianDay.number).toEqual(2456283);
+  });
+
+  it("should handle conversion from mars count", function() {
+    var mars = new daycount.counts.mars({year:4,dayOfYear:533});
+    var localJulianDay = daycount.counts.localJulianDay.from_mars(mars);
+    expect(localJulianDay.number).toEqual(2456283);
+  });
+
+  it("should handle conversion from thoth count", function() {
+    var thoth = new daycount.counts.thoth({year:38,dayOfYear:35});
+    var localJulianDay = daycount.counts.localJulianDay.from_thoth(thoth);
+    expect(localJulianDay.number).toEqual(2456283);
+  });
+
   it("should handle conversion from string", function() {
     var localJulianDay = daycount.counts.localJulianDay.from_String('LJD:2456283');
     expect(localJulianDay.number).toEqual(2456283);
