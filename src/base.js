@@ -45,12 +45,11 @@ daycount.moment = (function() {
     // Store argument as the only known property of this:
     this[arg.constructor.name] = arg;
 
-    var finished = false;
-    while(!finished) {
-
-      // Assume that there is nothing left to do, then try to prove
-      // that assumption incorrect:
-      finished = true;
+    // Iterate through counts in 'done'.  We're going to add to this list as we
+    // go, which makes this for loop a little more interesting:
+    for (var indexDone = 0; indexDone < done.length && todo.length > 0; ++indexDone) {
+      var nameDone = done[indexDone];
+      var builderNameTodo = 'from_' + nameDone;
 
       // Iterate through counts in 'todo'.  Since we're going to remove
       // them as we go, iterate backwards to keep remaining indices
@@ -59,29 +58,18 @@ daycount.moment = (function() {
         var nameTodo = todo[indexTodo];
         var countTodo = daycount.counts[nameTodo];
 
-        // Iterate through known counts in 'done', looking for something
-        // we can calculate 'countTodo' from:
-        for (var indexDone = 0; indexDone < done.length; ++indexDone) {
-          var nameDone = done[indexDone];
-          var builderNameTodo = 'from_' + nameDone;
-          if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
+        if(!countTodo.hasOwnProperty(builderNameTodo)) continue;
 
-          // Found one!  Calculate the value for 'countTodo':
-          var builder = countTodo[builderNameTodo];
-          var built = builder(this[nameDone]);
-          if(built === null) continue;
+        // Found one!  Calculate the value for 'countTodo':
+        var builder = countTodo[builderNameTodo];
+        var built = builder(this[nameDone]);
+        if(built === null) continue;
 
-          this[nameTodo] = builder(this[nameDone]);
-          done.push(nameTodo);
-          todo.splice(indexTodo, 1)
-          if('isUnknown' in this)
-            delete this['isUnknown'];
-
-          // Since we've just calculated another count, any remaining
-          // counts must be recalculated, meaning we're not finished:
-          finished = false;
-          break;
-        }
+        this[nameTodo] = builder(this[nameDone]);
+        done.push(nameTodo);
+        todo.splice(indexTodo, 1)
+        if('isUnknown' in this)
+          delete this['isUnknown'];
       }
     }
   };
