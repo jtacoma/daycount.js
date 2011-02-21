@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.2
+ * daycount.js v0.1.3
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -93,7 +93,7 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 2,
+  build: 3,
 };
 
 daycount.counts.dreamspell = (function () {
@@ -338,6 +338,24 @@ daycount.counts.localJulianDay = (function() {
     var number = 584283 + long.kin + 20 * long.winal + 360 * long.tun
       + 7200 * long.katun + 144000 * long.baktun;
     return new daycount.counts.localJulianDay(number);
+  };
+
+  localJulianDay.from_venus = function(venus) {
+    var year0 = venus.year > 0 ? venus.year - 1 : venus.year;
+    var offset = year0 * 224
+      + Math.floor(year0 / 10) * 7
+      + venus.dayOfYear - 1;
+    return new daycount.counts.localJulianDay(2453951 + offset);
+  };
+
+  localJulianDay.from_mars = function(mars) {
+    var offset = (mars.year > 0 ? mars.year - 1 : mars.year) * 687 + mars.dayOfYear - 1;
+    return new daycount.counts.localJulianDay(2453690 + offset);
+  };
+
+  localJulianDay.from_thoth = function(thoth) {
+    var offset = (thoth.year > 0 ? thoth.year - 1 : thoth.year) * 88 + thoth.dayOfYear - 1;
+    return new daycount.counts.localJulianDay(2452993 + offset);
   };
 
   localJulianDay.from_String = function(string) {
