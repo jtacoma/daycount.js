@@ -1,0 +1,24 @@
+---
+layout: post
+category: log
+---
+
+h1. daycount-0.1.3.js
+
+Ok, one more release before I go to sleep.
+
+Known bugs:
+
+* Safari 5 still doesn't work with the *explorer* demo.
+
+Backwards-incompatible changes:
+
+* @increment()@ has been renamed to @plus()@, returning a new moment instead of modifying the given moment.
+
+The following counts can now also be recognized in text:
+
+* Venus e.g. *VC:11/86*
+* Mars e.g. *MC:4/533*
+* Thoth e.g. *TC:38/35*
+
+Also, the *explorer* demo has been vastly improved with a few small changes.
