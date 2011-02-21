@@ -81,9 +81,9 @@
         var start = new daycount.moment($('#start').val());
         if (start.isUnknown) return;
         var already = $('#data').find('tbody').find('tr').length;
-        start = start.plus(already);
-        var days = 100;
         var direction = $('input:radio[name=direction]:checked').val() == 'future' ? 1 : -1;
+        start = start.plus(direction * already);
+        var days = 100;
         calendar_days(start, days, direction);
       }
       function calendar_days(start, days, step) {
