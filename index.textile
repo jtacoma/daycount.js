@@ -41,7 +41,7 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
     'Long Count: ' + today.long;
 </script>
 
-For a more interesting and interactive demo, see the "explorer":explorer.html.
+There's also a <a href="mobile/">mobile</a> demo better suited to small screens, and for a more interesting and interactive tool, check out the "explorer":explorer.html.
 
 h2. Log
 
