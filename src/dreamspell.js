@@ -15,15 +15,15 @@ daycount.counts.dreamspell = (function () {
   };
 
   var reference = {
-    gregorian: {year:2012, month:12, dayOfMonth:21},
+    gregorian: new daycount.counts.gregorian({year:2012, month:12, dayOfMonth:21}),
     dreamspell: {month:6, dayOfMonth:9, kin:207},
   };
 
   dreamspell.from_gregorian = function (gregorian) {
     if (reference.dreamspell.constructor !== dreamspell)
       reference.dreamspell = new dreamspell(reference.dreamspell);
-    var allDays = gregorian.from(reference.gregorian);
-    var leapDays = daycount.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
+    var allDays = gregorian.countDaysSince(reference.gregorian);
+    var leapDays = gregorian.countLeapDaysSince(reference.gregorian);
     return plusDays(reference.dreamspell, allDays - leapDays);
   };
 
