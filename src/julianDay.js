@@ -1,6 +1,3 @@
-/**
- * Julian day numbering system.
- */
 daycount.counts.julianDay = (function() {
 
   function julianDay(arg) {
@@ -8,17 +5,9 @@ daycount.counts.julianDay = (function() {
     this.number = parseInt(arg);
   };
 
-  // Instance methods:
-
-  julianDay.prototype.plus = function(days) {
-    return new daycount.counts.julianDay(this.number + days);
-  };
-
   julianDay.prototype.toString = function() {
     return this.number.toString();
   };
-
-  // Class methods:
 
   julianDay.from_Date = function(system) {
     // from Wikipedia's Julian_day article:

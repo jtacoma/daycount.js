@@ -8,7 +8,11 @@ daycount.counts.dreamspell = (function () {
     this.kin = parseInt(arg && arg.kin);
   };
 
-  // Static members:
+  dreamspell.prototype.toString = function() {
+    return (isNaN(this.month) ? 'x' : this.month)
+      + '.' + (isNaN(this.dayOfMonth) ? 'x' : this.dayOfMonth)
+      + '.' + (isNaN(this.kin) ? 'x' : this.kin)
+  };
 
   var reference = {
     gregorian: {year:2012, month:12, dayOfMonth:21},
@@ -21,14 +25,6 @@ daycount.counts.dreamspell = (function () {
     var allDays = gregorian.from(reference.gregorian);
     var leapDays = daycount.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
     return plusDays(reference.dreamspell, allDays - leapDays);
-  };
-
-  // Instance members:
-
-  dreamspell.prototype.toString = function() {
-    return (isNaN(this.month) ? 'x' : this.month)
-      + '.' + (isNaN(this.dayOfMonth) ? 'x' : this.dayOfMonth)
-      + '.' + (isNaN(this.kin) ? 'x' : this.kin)
   };
 
   function plusDays (dreamspell, days) {

@@ -60,25 +60,12 @@ describe("daycount.counts.gregorian", function() {
     expect(daycount.counts.gregorian.countLeapDaysBetween({year:1900,month:1}, {year:2012,month:12})).toEqual(28);
   });
 
-  it("should support addition", function() {
-    var gregorian = new daycount.moment(example).gregorian;
-    for(var diff = 0; diff > -2000; diff -= 17)
-    {
-      var by_plus = gregorian.plusDays(diff);
-      var system = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth+diff);
-      var by_system = daycount.counts.gregorian.from_Date(system);
-      expect(by_plus.toString()).toEqual(by_system.toString());
-    }
-    var extratest = gregorian.from(new daycount.counts.gregorian({year:1978,month:9,dayOfMonth:19}));
-    var verify = new Date(gregorian.year, gregorian.month-1, gregorian.dayOfMonth - extratest);
-    expect(verify.toISOString().split('T')[0]).toEqual('1978-09-19');
-  });
-
   it("should support difference", function() {
     var gregorian = new daycount.moment(example).gregorian;
+    var ljd = daycount.counts.localJulianDay.from_gregorian(gregorian);
     for(var diff = 0; diff > -2000; diff -= 17)
     {
-      var by_plus = gregorian.plusDays(diff);
+      var by_plus = daycount.counts.gregorian.from_localJulianDay(new daycount.counts.localJulianDay(ljd.number + diff));
       var by_plus_from = by_plus.from(gregorian);
       expect(by_plus_from).toEqual(diff);
       var from_by_plus = gregorian.from(by_plus);

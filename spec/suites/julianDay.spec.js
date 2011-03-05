@@ -20,12 +20,6 @@ describe("daycount.counts.julianDay", function() {
     expect(moment.julianDay.number).toEqual(2456283);
   });
 
-  it("should support addition", function() {
-    var julianDay = new daycount.moment(example).julianDay;
-    var yearago = julianDay.plus(-366);
-    expect(yearago.number).toEqual(julianDay.number - 366);
-  });
-
   it("should have a nice toString()", function() {
     var julianDay = new daycount.moment(example).julianDay;
     expect(julianDay.toString()).toEqual('2456283');

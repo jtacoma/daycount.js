@@ -5,8 +5,6 @@ daycount.counts.localJulianDay = (function() {
     this.number = parseInt(arg);
   };
 
-  // Instance methods:
-
   localJulianDay.prototype.plus = function(days) {
     return new daycount.counts.localJulianDay(this.number + days);
   };
@@ -15,7 +13,9 @@ daycount.counts.localJulianDay = (function() {
     return this.number.toString();
   };
 
-  // Class methods:
+  // Conversions.  Local Julian Day is the most normalized count, being just
+  // one integer to uniquely represent any day.  So it makes sense to convert
+  // between most counts via this one.
 
   localJulianDay.from_Date = function(system) {
     // from Wikipedia's Julian_day article:

@@ -1,6 +1,3 @@
-/**
- * Gregorian calendar system, as already implemented in system datetime libraries everywhere.
- */
 daycount.counts.gregorian = (function() {
 
   var dayOfYear = [0,31,28,31,30,31,30,31,31,30,31,30,31];
@@ -16,27 +13,7 @@ daycount.counts.gregorian = (function() {
     this.dayOfYear = dayOfYear[this.month - 1]
         + this.dayOfMonth
         + ((this.isLeapYear && this.month > 2) ? 1 : 0);
-  };
 
-  // Instance methods:
-
-  // returns the number of days from the specified day to this day
-  // e.g. {2012-12-21}.from({2012-12-01}) == 20
-  gregorian.prototype.from = function (other) {
-    var other = (other.constructor === gregorian)
-      ? other : new gregorian(other);
-    var leaps = gregorian.countLeapDaysBetween(
-      new gregorian({year:this.year,month:1,dayOfMonth:1}),
-      new gregorian({year:other.year,month:1,dayOfMonth:1}));
-    return (this.year - other.year) * 365
-      + this.dayOfYear - other.dayOfYear
-      - leaps;
-  };
-
-  gregorian.prototype.plusDays = function (days) {
-    // Set time of day to 12:00 to eliminate possible error due to time zone fluctuations:
-    var system = new Date(this.year, this.month - 1, this.dayOfMonth + days, 12);
-    return gregorian.from_Date(system);
   };
 
   gregorian.prototype.toString = function() {
@@ -98,6 +75,19 @@ daycount.counts.gregorian = (function() {
       month: parseInt(month),
       dayOfMonth: parseInt(dayOfMonth),
     });
+  };
+
+  // returns the number of days from the specified day to this day
+  // e.g. daysBetween({2012-12-21}, {2012-12-01}) == 20
+  gregorian.prototype.from = function (other) {
+    var other = (other.constructor === gregorian)
+    ? other : new gregorian(other);
+    var leaps = gregorian.countLeapDaysBetween(
+    new gregorian({year:this.year,month:1,dayOfMonth:1}),
+    new gregorian({year:other.year,month:1,dayOfMonth:1}));
+    return (this.year - other.year) * 365
+    + this.dayOfYear - other.dayOfYear
+    - leaps;
   };
 
   return gregorian;
