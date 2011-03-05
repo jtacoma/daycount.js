@@ -64,4 +64,12 @@ describe("daycount.counts.dreamspell", function() {
     expect(dreamspell.toString()).toEqual('1.2.3');
   });
 
+  it("should name its counts", function() {
+    var dreamspell = new daycount.counts.dreamspell({month:1,dayOfMonth:2,kin:3});
+    expect(dreamspell.monthName()).toEqual('Magnetic');
+    expect(dreamspell.kinToneName()).toEqual('Electric');
+    expect(dreamspell.kinSealName()).toEqual('Night');
+    expect(dreamspell.kinColorName()).toEqual('Blue');
+  });
+
 });
