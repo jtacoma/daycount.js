@@ -43,6 +43,8 @@ bc. <script src="http://yellowseed.org/daycount.js/js/daycount-0.1.js"></script>
 
 There's also a <a href="mobile/">mobile</a> demo better suited to small screens, and for a more interesting and interactive tool, check out the "explorer":explorer.html.
 
+Please report bugs and inaccuracies, suggest new features, or comment on others' suggestions in the <a href="https://github.com/jtacoma/daycount.js/issues">issue tracker</a>, or just <a href="mailto:joshua@yellowseed.org">email me</a>.
+
 h2. Log
 
 <ul class="posts">
