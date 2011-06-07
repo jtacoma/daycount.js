@@ -26,8 +26,10 @@ daycount.counts.gregorian = (function() {
   gregorian.prototype.countDaysSince = function (other) {
     var other = (other.constructor === gregorian)
       ? other : new gregorian(other);
-    var leaps = new gregorian({year:other.year,month:1,dayOfMonth:1})
-      .countLeapDaysSince(new gregorian({year:this.year,month:1,dayOfMonth:1}));
+    var leaps = new gregorian(
+      { year: other.year, month: 1, dayOfMonth: 1 })
+      .countLeapDaysSince(new gregorian(
+        { year: this.year, month: 1, dayOfMonth: 1 }));
     return (this.year - other.year) * 365
       + this.dayOfYear - other.dayOfYear
       - leaps;
@@ -78,7 +80,7 @@ daycount.counts.gregorian = (function() {
   };
 
   gregorian.from_localJulianDay = function (localJulianDay) {
-    // see http://en.wikipedia.org/wiki/Julian_day#Gregorian_calendar_from_Julian_day_number
+    // See Wikipedia's Julian_day#Gregorian_calendar_from_Julian_day_number
     var J = localJulianDay.number + 0.5;
     var j = J + 32044;
     var g = Math.floor(j / 146097);
