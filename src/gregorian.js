@@ -3,7 +3,7 @@ daycount.counts.gregorian = (function() {
   var dayOfYear = [0,31,28,31,30,31,30,31,31,30,31,30,31];
   for(var i = 1; i < dayOfYear.length; ++i)
     dayOfYear[i] += dayOfYear[i-1];
-  var friday = {year:2012,month:12,dayOfMonth:21};
+  var friday = { year: 2012, month: 12, dayOfMonth: 21 };
 
   function gregorian(arg) {
     this.year = parseInt(arg && arg.year);
@@ -49,18 +49,14 @@ daycount.counts.gregorian = (function() {
     return this_leaps - other_leaps;
   }
 
+  gregorian.localized = {};
+
   gregorian.prototype.dayOfWeekName = function() {
-    return [null,
-      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-      "Saturday"
-    ][this.dayOfWeek];
+    return gregorian.localized.dayOfWeekNames[this.dayOfWeek-1];
   };
 
   gregorian.prototype.monthName = function() {
-    return [null,
-      "January", "February", "March", "April", "May", "June", "July",
-      "August", "September", "October", "November", "December"
-    ][this.month];
+    return gregorian.localized.monthNames[this.month-1];
   };
 
   gregorian.prototype.toString = function() {
