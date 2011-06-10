@@ -1,8 +1,8 @@
-daycount.counts.bahai = (function() {
+daycount.counts.badi = (function() {
 
   var epoch_jd = 2394647; // 1844-03-21
 
-  function bahai(arg) {
+  function badi(arg) {
     this.major = parseInt(arg && arg.major);
     this.cycle = parseInt(arg && arg.cycle);
     this.year = parseInt(arg && arg.year);
@@ -22,12 +22,12 @@ daycount.counts.bahai = (function() {
     //this.dayOfWeek = ?
   };
 
-  bahai.prototype.toString = function() {
+  badi.prototype.toString = function() {
     return this.major + ':' + this.cycle + ':' + this.year +
       ':' + this.dayOfYear;
   };
 
-  bahai.from_gregorian = function(gregorian) {
+  badi.from_gregorian = function(gregorian) {
     var isLeapYear = gregorian.isLeapYear
       ? gregorian.month > 3
         || (gregorian.month == 3 && gregorian.dayOfMonth >= 21)
@@ -40,7 +40,7 @@ daycount.counts.bahai = (function() {
                   - 20;
     if (dayOfYear <= 0) dayOfYear += isLeapYear ? 362 : 361;
     var year = gregorian.year - ((dayOfYear >= 285) ? 1845 : 1844);
-    return new daycount.counts.bahai({
+    return new daycount.counts.badi({
       major: Math.floor(year / (19 * 19)),
       cycle: Math.floor(year / 19),
       year: year,
@@ -49,12 +49,12 @@ daycount.counts.bahai = (function() {
     });
   };
 
-  bahai.pattern = /(\d+):(\d+):(\d+):(\d+)/;
+  badi.pattern = /(\d+):(\d+):(\d+):(\d+)/;
 
-  bahai.from_String = function(string) {
-    var match = (bahai.pattern).exec(string);
+  badi.from_String = function(string) {
+    var match = (badi.pattern).exec(string);
     if (!match) return null;
-    return new daycount.counts.bahai({
+    return new daycount.counts.badi({
       major: parseInt(match[1]),
       cycle: parseInt(match[2]),
       year: parseInt(match[3]),
@@ -62,5 +62,5 @@ daycount.counts.bahai = (function() {
     });
   };
 
-  return bahai;
+  return badi;
 })();
