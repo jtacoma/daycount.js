@@ -29,20 +29,22 @@ daycount.counts.badi = (function() {
 
   badi.from_gregorian = function(gregorian) {
     var isLeapYear = gregorian.isLeapYear
-      ? gregorian.month > 3
-        || (gregorian.month == 3 && gregorian.dayOfMonth >= 21)
-      : new daycount.counts.gregorian({
-          year: gregorian.year + 1,
-          month: 1,
-          dayOfMonth: 1}).isLeapYear;
-    var dayOfYear = gregorian.dayOfYear - 31
-                  - (gregorian.isLeapYear ? 29 : 28)
-                  - 20;
-    if (dayOfYear <= 0) dayOfYear += isLeapYear ? 362 : 361;
+      ? (gregorian.month < 3 ||
+         (gregorian.month == 3 && gregorian.dayOfMonth < 21))
+      : new daycount.counts.gregorian(
+          { year: gregorian.year + 1, month: 1, dayOfMonth: 1}).isLeapYear;
+    var dayOfYear = gregorian.countDaysSince(
+        { year: gregorian.year, month: 3, dayOfMonth: 20});
+    if (dayOfYear <= 0) dayOfYear += isLeapYear ? 366 : 365;
     var year = gregorian.year - ((dayOfYear >= 285) ? 1845 : 1844);
+    if (year >= 0) year += 1;
+    var major = Math.floor((year - 1) / (19 * 19));
+    if (major >= 0) major += 1;
+    var cycle = Math.floor((year - 1) / 19);
+    if (cycle >= 0) cycle += 1;
     return new daycount.counts.badi({
-      major: Math.floor(year / (19 * 19)),
-      cycle: Math.floor(year / 19),
+      major: major,
+      cycle: cycle,
       year: year,
       dayOfYear: dayOfYear,
       isLeapYear: isLeapYear,
