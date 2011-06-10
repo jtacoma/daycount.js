@@ -8,27 +8,26 @@ describe("daycount.counts.bahai", function() {
   });
 
   it("should handle conversion from string", function() {
-    var bahai = daycount.counts.bahai.from_String('5-4-3-2-1');
+    var bahai = daycount.counts.bahai.from_String('5:4:3:2');
     expect(bahai.major).toEqual(5);
     expect(bahai.cycle).toEqual(4);
     expect(bahai.year).toEqual(3);
-    expect(bahai.month).toEqual(2);
-    expect(bahai.dayOfMonth).toEqual(1);
+    expect(bahai.dayOfYear).toEqual(2);
   });
 
-  it("should handle conversion from local julian day", function() {
-    expect(daycount.counts.bahai.from_localJulianDay).toBeDefined();
+  it("should handle conversion from gregorian", function() {
+    expect(daycount.counts.bahai.from_gregorian).toBeDefined();
     var references = [
       {
-        localJulianDay: new daycount.counts.localJulianDay(2394647),
+        gregorian: example_gregorian,
         bahai: new daycount.counts.bahai(
-          { major: 0, cycle: 0, year: 0, month: 0, dayOfMonth: 1 }),
+          { major: 0, cycle: 0, year: 0, dayOfYear: 1 }),
       },
     ];
     for(var i = 0; i < references.length; ++i)
     {
       var ref = references[i];
-      var bahai = daycount.counts.bahai.from_localJulianDay(ref.localJulianDay);
+      var bahai = daycount.counts.bahai.from_gregorian(ref.gregorian);
       expect(bahai.toString()).toEqual(ref.bahai.toString());
     }
   });
@@ -40,14 +39,15 @@ describe("daycount.counts.bahai", function() {
     expect(moment.bahai.major).toEqual(0);
     expect(moment.bahai.cycle).toEqual(0);
     expect(moment.bahai.year).toEqual(0);
-    expect(moment.bahai.month).toEqual(0);
-    expect(moment.bahai.dayOfMonth).toEqual(0);
+    expect(moment.bahai.dayOfYear).toEqual(1);
+    expect(moment.bahai.month).toEqual(1);
+    expect(moment.bahai.dayOfMonth).toEqual(1);
   });
 
   it("should have a nice toString()", function() {
     expect(new daycount.counts.bahai(
-      { major: 13, cycle: 12, year: 11, month: 10, dayOfMonth: 9 })
-      .toString()).toEqual('13-12-11-10-9');
+      { major: 13, cycle: 12, year: 11, dayOfYear: 10 })
+      .toString()).toEqual('13:12:11:10');
   });
 
 });

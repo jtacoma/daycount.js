@@ -6,28 +6,50 @@ daycount.counts.bahai = (function() {
     this.major = parseInt(arg && arg.major);
     this.cycle = parseInt(arg && arg.cycle);
     this.year = parseInt(arg && arg.year);
-    this.month = parseInt(arg && arg.month);
-    this.dayOfMonth = parseInt(arg && arg.dayOfMonth);
+    this.dayOfYear = parseInt(arg && arg.dayOfYear);
+    this.isLeapYear = parseInt(arg && arg.isLeapYear);
+    var intercalaryStart = 336;
+    var intercalaryEnd = 336 + (this.isLeapYear ? 6 : 5);
+    this.isIntercalary = intercalaryStart <= this.dayOfYear 
+                      && this.dayOfYear < intercalaryEnd;
+    this.month = this.isIntercalary ? NaN
+      : (this.dayOfYear >= intercalaryEnd) ? 19
+      : Math.floor((this.dayOfYear - 1) / 19) + 1;
+    this.dayOfMonth = this.isIntercalary ? NaN
+      : (this.isLeapYear && this.month == 19)
+      ? this.dayOfYear - intercalaryEnd
+      : (this.dayOfYear - 1) % 19 + 1;
     //this.dayOfWeek = ?
   };
 
   bahai.prototype.toString = function() {
-    return this.major + '-' + this.cycle + '-' + this.year +
-      '-' + this.month + '-' + this.dayOfMonth;
+    return this.major + ':' + this.cycle + ':' + this.year +
+      ':' + this.dayOfYear;
   };
 
-  bahai.pattern = /(\d+)\-(\d+)\-(\d+)\-(\d+)\-(\d+)/;
-
-  bahai.from_localJulianDay = function(localJulianDay) {
-    var days = localJulianDay.number - epoch_jd;
+  bahai.from_gregorian = function(gregorian) {
+    var isLeapYear = gregorian.isLeapYear
+      ? gregorian.month > 3
+        || (gregorian.month == 3 && gregorian.dayOfMonth >= 21)
+      : new daycount.counts.gregorian({
+          year: gregorian.year + 1,
+          month: 1,
+          dayOfMonth: 1}).isLeapYear;
+    var dayOfYear = gregorian.dayOfYear - 31
+                  - (gregorian.isLeapYear ? 29 : 28)
+                  - 20;
+    if (dayOfYear <= 0) dayOfYear += isLeapYear ? 362 : 361;
+    var year = gregorian.year - ((dayOfYear >= 285) ? 1845 : 1844);
     return new daycount.counts.bahai({
-      major: NaN,
-      cycle: NaN,
-      year: NaN,
-      month: NaN,
-      dayOfMonth: NaN,
+      major: Math.floor(year / (19 * 19)),
+      cycle: Math.floor(year / 19),
+      year: year,
+      dayOfYear: dayOfYear,
+      isLeapYear: isLeapYear,
     });
   };
+
+  bahai.pattern = /(\d+):(\d+):(\d+):(\d+)/;
 
   bahai.from_String = function(string) {
     var match = (bahai.pattern).exec(string);
@@ -36,8 +58,7 @@ daycount.counts.bahai = (function() {
       major: parseInt(match[1]),
       cycle: parseInt(match[2]),
       year: parseInt(match[3]),
-      month: parseInt(match[4]),
-      dayOfMonth: parseInt(match[5]),
+      dayOfYear: parseInt(match[4]),
     });
   };
 
