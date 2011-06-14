@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.3
+ * daycount.js v0.1.4
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -9,9 +9,11 @@
  */
 
 // All other globals defined here are kept in this object:
-var daycount = (typeof exports !== 'undefined' && exports !== null) ? exports : {};
+var daycount = (typeof exports !== 'undefined' && exports !== null)
+  ? exports : {};
 
-// The 'moment' type, which may include associated information from any calendar system:
+// The 'moment' type, which may include associated information from any
+// calendar system:
 daycount.moment = (function() {
 
   // 'moment' constructor:
@@ -47,7 +49,10 @@ daycount.moment = (function() {
 
     // Iterate through counts in 'done'.  We're going to add to this list as we
     // go, which makes this for loop a little more interesting:
-    for (var indexDone = 0; indexDone < done.length && todo.length > 0; ++indexDone) {
+    for (var indexDone = 0;
+         indexDone < done.length && todo.length > 0;
+         ++indexDone)
+    {
       var nameDone = done[indexDone];
       var builderNameTodo = 'from_' + nameDone;
 
@@ -76,7 +81,9 @@ daycount.moment = (function() {
 
   moment.prototype.plusEarthSolarDays = function(days) {
     if('localJulianDay' in this)
-      return new moment(new daycount.counts.localJulianDay(this.localJulianDay.number + days));
+      return new moment(
+        new daycount.counts.localJulianDay(
+          this.localJulianDay.number + days));
     else
       throw 'this moment has no counts that support the specified increment.';
   };
@@ -93,6 +100,6 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 3,
+  build: 4,
 };
 

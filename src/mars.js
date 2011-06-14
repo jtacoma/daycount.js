@@ -6,11 +6,16 @@ daycount.counts.mars = (function() {
     this.year = parseInt(arg && arg.year);
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
     this.ascent = this.dayOfYear <= 300 ? this.dayOfYear : NaN;
-    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340 ? this.dayOfYear - 300 : NaN;
-    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343 ? this.dayOfYear - 340 : NaN;
-    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344 ? this.dayOfYear - 343 : NaN;
-    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347 ? this.dayOfYear - 344 : NaN;
-    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387 ? this.dayOfYear - 347 : NaN;
+    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340
+      ? this.dayOfYear - 300 : NaN;
+    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343
+      ? this.dayOfYear - 340 : NaN;
+    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344
+      ? this.dayOfYear - 343 : NaN;
+    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347
+      ? this.dayOfYear - 344 : NaN;
+    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387
+      ? this.dayOfYear - 347 : NaN;
     this.descent = 387 < this.dayOfYear ? this.dayOfYear - 387 : NaN;
   };
 
