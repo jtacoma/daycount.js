@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.4
+ * daycount.js v0.1.5
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -100,7 +100,7 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 4,
+  build: 5,
 };
 
 daycount.counts.badi = (function() {
@@ -206,8 +206,7 @@ daycount.counts.dreamspell = (function () {
   };
 
   var reference = {
-    gregorian: new daycount.counts.gregorian(
-      { year: 2012, month: 12, dayOfMonth: 21 }),
+    gregorian: { year: 2012, month: 12, dayOfMonth: 21 },
     dreamspell: { month: 6, dayOfMonth: 9, kin: 207 },
   };
 
