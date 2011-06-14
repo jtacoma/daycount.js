@@ -54,11 +54,12 @@
             <tr>
               <th>Gregorian</th>
               <th>Julian Day</th>
+              <th>Badí‘</th>
+              <th>Long</th>
               <th>Dreamspell</th>
               <th>Venus</th>
               <th>Mars</th>
               <th>Thoth</th>
-              <th>Long</th>
             </tr>
           </thead>
           <tbody>
@@ -90,11 +91,12 @@
           html += '<tr>' +
             '<td>' + day.gregorian + '</td>' +
             '<td>' + day.localJulianDay + '</td>' +
+            '<td>' + day.badi + '</td>' +
+            '<td>' + day.long + '</td>' +
             '<td>' + day.dreamspell + '</td>' +
             '<td>' + day.venus + '</td>' +
             '<td>' + day.mars + '</td>' +
             '<td>' + day.thoth + '</td>' +
-            '<td>' + day.long + '</td>' +
             '</tr>';
         }
         $('#data').find('tbody').append(html);

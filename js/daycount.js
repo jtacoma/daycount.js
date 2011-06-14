@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.3
+ * daycount.js v0.1.4
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -9,9 +9,11 @@
  */
 
 // All other globals defined here are kept in this object:
-var daycount = (typeof exports !== 'undefined' && exports !== null) ? exports : {};
+var daycount = (typeof exports !== 'undefined' && exports !== null)
+  ? exports : {};
 
-// The 'moment' type, which may include associated information from any calendar system:
+// The 'moment' type, which may include associated information from any
+// calendar system:
 daycount.moment = (function() {
 
   // 'moment' constructor:
@@ -47,7 +49,10 @@ daycount.moment = (function() {
 
     // Iterate through counts in 'done'.  We're going to add to this list as we
     // go, which makes this for loop a little more interesting:
-    for (var indexDone = 0; indexDone < done.length && todo.length > 0; ++indexDone) {
+    for (var indexDone = 0;
+         indexDone < done.length && todo.length > 0;
+         ++indexDone)
+    {
       var nameDone = done[indexDone];
       var builderNameTodo = 'from_' + nameDone;
 
@@ -76,7 +81,9 @@ daycount.moment = (function() {
 
   moment.prototype.plusEarthSolarDays = function(days) {
     if('localJulianDay' in this)
-      return new moment(new daycount.counts.localJulianDay(this.localJulianDay.number + days));
+      return new moment(
+        new daycount.counts.localJulianDay(
+          this.localJulianDay.number + days));
     else
       throw 'this moment has no counts that support the specified increment.';
   };
@@ -93,9 +100,101 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 3,
+  build: 4,
 };
 
+daycount.counts.badi = (function() {
+
+  var epoch_jd = 2394647; // 1844-03-21
+
+  function badi(arg) {
+    this.major = parseInt(arg && arg.major);
+    this.cycle = parseInt(arg && arg.cycle);
+    this.year = parseInt(arg && arg.year);
+    this.dayOfYear = parseInt(arg && arg.dayOfYear);
+    this.isLeapYear = parseInt(arg && arg.isLeapYear);
+    var intercalaryStart = 336;
+    var intercalaryEnd = 336 + (this.isLeapYear ? 6 : 5);
+    this.isIntercalary = intercalaryStart <= this.dayOfYear 
+                      && this.dayOfYear < intercalaryEnd;
+    this.month = this.isIntercalary ? NaN
+      : (this.dayOfYear >= intercalaryEnd) ? 19
+      : Math.floor((this.dayOfYear - 1) / 19) + 1;
+    this.dayOfMonth = this.isIntercalary ? NaN
+      : (this.isLeapYear && this.month == 19)
+      ? this.dayOfYear - intercalaryEnd
+      : (this.dayOfYear - 1) % 19 + 1;
+    //this.dayOfWeek = ?
+  };
+
+  badi.prototype.toString = function() {
+    return this.major + ':' + this.cycle + ':' + this.year +
+      ':' + this.dayOfYear;
+  };
+
+  badi.from_gregorian = function(gregorian) {
+    var isLeapYear = gregorian.isLeapYear
+      ? (gregorian.month < 3 ||
+         (gregorian.month == 3 && gregorian.dayOfMonth < 21))
+      : new daycount.counts.gregorian(
+          { year: gregorian.year + 1, month: 1, dayOfMonth: 1}).isLeapYear;
+    var dayOfYear = gregorian.countDaysSince(
+        { year: gregorian.year, month: 3, dayOfMonth: 20});
+    if (dayOfYear <= 0) dayOfYear += isLeapYear ? 366 : 365;
+    var year = gregorian.year - ((dayOfYear >= 285) ? 1845 : 1844);
+    if (year >= 0) year += 1;
+    var major = Math.floor((year - 1) / (19 * 19));
+    if (major >= 0) major += 1;
+    var cycle = Math.floor((year - 1) / 19);
+    if (cycle >= 0) cycle += 1;
+    return new daycount.counts.badi({
+      major: major,
+      cycle: cycle,
+      year: year,
+      dayOfYear: dayOfYear,
+      isLeapYear: isLeapYear,
+    });
+  };
+
+  badi.pattern = /(\d+):(\d+):(\d+):(\d+)/;
+
+  badi.from_String = function(string) {
+    var match = (badi.pattern).exec(string);
+    if (!match) return null;
+    return new daycount.counts.badi({
+      major: parseInt(match[1]),
+      cycle: parseInt(match[2]),
+      year: parseInt(match[3]),
+      dayOfYear: parseInt(match[4]),
+    });
+  };
+
+  return badi;
+})();
+// Dates in the Chinese calendar are difficult to calculate without certain
+// hard-to-find information.  For now, this algorithm calculates only the year,
+// and only for dates when such a simple algorithm is reliable.  For other
+// dates, it will determine 'stem' and 'branch' numbers as NaN.
+// TODO: Find the necessary information and replace this algorithm with
+// something more complete.
+daycount.counts.chineseYear = (function() {
+  function chineseYear (arg) {
+    this.stem = parseInt(arg && arg.stem);
+    this.branch = parseInt(arg && arg.branch);
+  }
+  chineseYear.prototype.toString = function() {
+    return (this.stem || '?') + '/' + (this.branch || '?');
+  };
+  chineseYear.from_gregorian = function(gregorian) {
+    if (gregorian.month <= 2)
+      return new chineseYear({stem:NaN,branch:NaN});
+    var year0 = ((gregorian.year - 2044 % 60) + 60) % 60;
+    var stem = (year0 % 10) + 1;
+    var branch = (year0 % 12) + 1;
+    return new chineseYear({stem:stem,branch:branch});
+  };
+  return chineseYear;
+})();
 daycount.counts.dreamspell = (function () {
 
   function dreamspell (arg) {
@@ -106,27 +205,10 @@ daycount.counts.dreamspell = (function () {
     this.kin = parseInt(arg && arg.kin);
   };
 
-  // Static members:
-
   var reference = {
-    gregorian: {year:2012, month:12, dayOfMonth:21},
-    dreamspell: {month:6, dayOfMonth:9, kin:207},
-  };
-
-  dreamspell.from_gregorian = function (gregorian) {
-    if (reference.dreamspell.constructor !== dreamspell)
-      reference.dreamspell = new dreamspell(reference.dreamspell);
-    var allDays = gregorian.from(reference.gregorian);
-    var leapDays = daycount.counts.gregorian.countLeapDaysBetween(reference.gregorian, gregorian);
-    return plusDays(reference.dreamspell, allDays - leapDays);
-  };
-
-  // Instance members:
-
-  dreamspell.prototype.toString = function() {
-    return (isNaN(this.month) ? 'x' : this.month)
-      + '.' + (isNaN(this.dayOfMonth) ? 'x' : this.dayOfMonth)
-      + '.' + (isNaN(this.kin) ? 'x' : this.kin)
+    gregorian: new daycount.counts.gregorian(
+      { year: 2012, month: 12, dayOfMonth: 21 }),
+    dreamspell: { month: 6, dayOfMonth: 9, kin: 207 },
   };
 
   function plusDays (dreamspell, days) {
@@ -138,7 +220,8 @@ daycount.counts.dreamspell = (function () {
       month = Math.ceil(dayOfYear / 28);
       dayOfMonth = dayOfYear - ((month - 1) * 28);
     }
-    var kin = isNaN(dreamspell.kin) ? NaN : (dreamspell.kin + (days % 260) + 259) % 260 + 1;
+    var kin = isNaN(dreamspell.kin) ? NaN
+      : (dreamspell.kin + (days % 260) + 259) % 260 + 1;
     return new daycount.counts.dreamspell({
       month: month,
       dayOfMonth: dayOfMonth,
@@ -146,47 +229,120 @@ daycount.counts.dreamspell = (function () {
     });
   };
 
+  dreamspell.from_gregorian = function (gregorian) {
+    if (reference.dreamspell.constructor !== dreamspell)
+      reference.dreamspell = new dreamspell(reference.dreamspell);
+    var allDays = gregorian.countDaysSince(reference.gregorian);
+    var leapDays = gregorian.countLeapDaysSince(reference.gregorian);
+    return plusDays(reference.dreamspell, allDays - leapDays);
+  };
+
+  dreamspell.localized = {};
+
+  dreamspell.prototype.monthName = function() {
+    return dreamspell.localized.monthNames[this.month - 1];
+  };
+
+  dreamspell.prototype.kinToneName = function() {
+    return dreamspell.localized.kinToneNames[this.kin % 13];
+  };
+
+  dreamspell.prototype.kinSealName = function() {
+    return dreamspell.localized.kinSealNames[this.kin % 20];
+  };
+
+  dreamspell.prototype.kinColorName = function() {
+    return dreamspell.localized.kinColorNames[this.kin % 4];
+  };
+
+  dreamspell.prototype.toString = function() {
+    return (isNaN(this.month) ? 'x' : this.month)
+      + '.' + (isNaN(this.dayOfMonth) ? 'x' : this.dayOfMonth)
+      + '.' + (isNaN(this.kin) ? 'x' : this.kin)
+  };
+
   return dreamspell;
 })();
-/**
- * Gregorian calendar system, as already implemented in system datetime libraries everywhere.
- */
+daycount.counts.dreamspell.localized.monthNames = [
+  "Magnetic", "Lunar", "Electric", "Self-Existing", "Overtone", "Rhythmic",
+  "Resonant", "Galactic", "Solar", "Spectral", "Planetary", "Crystal",
+  "Cosmic"
+];
+
+daycount.counts.dreamspell.localized.kinToneNames = [
+  "Cosmic",
+  "Magnetic", "Lunar", "Electric", "Self-Existing", "Overtone", "Rhythmic",
+  "Resonant", "Galactic", "Solar", "Spectral", "Planetary", "Crystal"
+];
+
+daycount.counts.dreamspell.localized.kinSealNames = [
+  "Sun", "Dragon", "Wind", "Night", "Seed", "Serpent", "World-Bridger",
+  "Hand", "Star", "Moon", "Dog", "Monkey", "Human", "Skywalker", "Wizard",
+  "Eagle", "Warrior", "Earth", "Mirror", "Storm"
+];
+
+daycount.counts.dreamspell.localized.kinColorNames = [
+  "Yellow", "Red", "White", "Blue"
+];
 daycount.counts.gregorian = (function() {
 
   var dayOfYear = [0,31,28,31,30,31,30,31,31,30,31,30,31];
   for(var i = 1; i < dayOfYear.length; ++i)
     dayOfYear[i] += dayOfYear[i-1];
+  var friday = { year: 2012, month: 12, dayOfMonth: 21 };
 
   function gregorian(arg) {
     this.year = parseInt(arg && arg.year);
     this.month = parseInt(arg && arg.month);
     this.dayOfMonth = parseInt(arg && arg.dayOfMonth);
-    this.isLeapYear = (!(this.year % 4) && (this.year % 100) || !(this.year % 400)) != 0;
-    this.isLeapDay = this.isLeapYear && (this.month == 2) && (this.dayOfMonth == 29);
+    this.isLeapYear =
+      (!(this.year % 4) && (this.year % 100) || !(this.year % 400)) != 0;
+    this.isLeapDay =
+      this.isLeapYear && (this.month == 2) && (this.dayOfMonth == 29);
     this.dayOfYear = dayOfYear[this.month - 1]
-        + this.dayOfMonth
-        + ((this.isLeapYear && this.month > 2) ? 1 : 0);
+      + this.dayOfMonth + ((this.isLeapYear && this.month > 2) ? 1 : 0);
+    var a = Math.floor((14 - this.month) / 12);
+    var y = this.year - a;
+    var m = this.month + 12 * a - 2;
+    this.dayOfWeek = ((this.dayOfMonth + y + Math.floor(y / 4)
+      - Math.floor(y / 100) + Math.floor(y / 400) + Math.floor(31 * m / 12))
+      % 7 + 7) % 7 + 1;
   };
 
-  // Instance methods:
-
-  // returns the number of days from the specified day to this day
-  // e.g. {2012-12-21}.from({2012-12-01}) == 20
-  gregorian.prototype.from = function (other) {
+  gregorian.prototype.countDaysSince = function (other) {
     var other = (other.constructor === gregorian)
       ? other : new gregorian(other);
-    var leaps = gregorian.countLeapDaysBetween(
-      new gregorian({year:this.year,month:1,dayOfMonth:1}),
-      new gregorian({year:other.year,month:1,dayOfMonth:1}));
+    var leaps = new gregorian(
+      { year: other.year, month: 1, dayOfMonth: 1 })
+      .countLeapDaysSince(new gregorian(
+        { year: this.year, month: 1, dayOfMonth: 1 }));
     return (this.year - other.year) * 365
       + this.dayOfYear - other.dayOfYear
       - leaps;
   };
 
-  gregorian.prototype.plusDays = function (days) {
-    // Set time of day to 12:00 to eliminate possible error due to time zone fluctuations:
-    var system = new Date(this.year, this.month - 1, this.dayOfMonth + days, 12);
-    return gregorian.from_Date(system);
+  gregorian.prototype.countLeapDaysSince = function(other) {
+    other = (other.constructor === gregorian)
+      ? other : new gregorian(other);
+    other_leaps = Math.floor(other.year / 4) - Math.floor(other.year / 100)
+      + Math.floor(other.year / 400);
+    if (other.isLeapYear && other.month <= 2)
+      other_leaps -= 1;
+    this_leaps = Math.floor(this.year / 4) - Math.floor(this.year / 100)
+      + Math.floor(this.year / 400);
+    if (this.isLeapYear && this.month <= 2)
+      this_leaps -= 1;
+    return this_leaps - other_leaps;
+  }
+
+  gregorian.localized = {};
+
+  gregorian.prototype.dayOfWeekName = function() {
+    return gregorian.localized.dayOfWeekNames[this.dayOfWeek-1];
+  };
+
+  gregorian.prototype.monthName = function() {
+    return gregorian.localized.monthNames[this.month-1];
   };
 
   gregorian.prototype.toString = function() {
@@ -197,16 +353,6 @@ daycount.counts.gregorian = (function() {
 
   // Class methods:
 
-  gregorian.countLeapDaysBetween = function (first, last) {
-    first = (first.constructor === gregorian) ? first : new gregorian(first);
-    last = (last.constructor === gregorian) ? last : new gregorian(last);
-    first_leaps = Math.floor(first.year / 4) - Math.floor(first.year / 100) + Math.floor(first.year / 400);
-    if (first.isLeapYear && first.month <= 2) first_leaps -= 1;
-    last_leaps = Math.floor(last.year / 4) - Math.floor(last.year / 100) + Math.floor(last.year / 400);
-    if (last.isLeapYear && last.month <= 2) last_leaps -= 1;
-    return last_leaps - first_leaps;
-  };
-
   gregorian.from_Date = function (system) {
     return new daycount.counts.gregorian({
       year: system.getFullYear(),
@@ -216,7 +362,7 @@ daycount.counts.gregorian = (function() {
   };
 
   gregorian.from_localJulianDay = function (localJulianDay) {
-    // From Wikipedia's Julian_day article:
+    // See Wikipedia's Julian_day#Gregorian_calendar_from_Julian_day_number
     var J = localJulianDay.number + 0.5;
     var j = J + 32044;
     var g = Math.floor(j / 146097);
@@ -227,9 +373,9 @@ daycount.counts.gregorian = (function() {
     var db = dc % 1461;
     var a = Math.floor((Math.floor(db / 365) + 1) * 3 / 4);
     var da = db - a * 365;
-    var y = g * 400 + c * 100 + b * 4 + a; // number of full years elapsed since March 1, 4801 BC at 00:00 UTC);
-    var m = Math.floor((Math.floor(da * 5) + 308) / 153) - 2; // number of full months elapsed since the last March 1 at 00:00 UTC);
-    var d = da - Math.floor((m + 4) * 153 / 5) + 122; // number of days elapsed since day 1 of the month at 00:00 UTC, including fractions of one day);
+    var y = g * 400 + c * 100 + b * 4 + a;
+    var m = Math.floor((Math.floor(da * 5) + 308) / 153) - 2;
+    var d = da - Math.floor((m + 4) * 153 / 5) + 122;
     var Y = y - 4800 + Math.floor((m + 2) / 12);
     var M = (m + 2) % 12 + 1;
     var D = d + 1;
@@ -252,9 +398,15 @@ daycount.counts.gregorian = (function() {
 
   return gregorian;
 })();
-/**
- * Julian day numbering system.
- */
+daycount.counts.gregorian.localized.dayOfWeekNames = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+  "Saturday"
+];
+
+daycount.counts.gregorian.localized.monthNames = [
+  "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"
+];
 daycount.counts.julianDay = (function() {
 
   function julianDay(arg) {
@@ -262,17 +414,9 @@ daycount.counts.julianDay = (function() {
     this.number = parseInt(arg);
   };
 
-  // Instance methods:
-
-  julianDay.prototype.plus = function(days) {
-    return new daycount.counts.julianDay(this.number + days);
-  };
-
   julianDay.prototype.toString = function() {
     return this.number.toString();
   };
-
-  // Class methods:
 
   julianDay.from_Date = function(system) {
     // from Wikipedia's Julian_day article:
@@ -296,8 +440,6 @@ daycount.counts.localJulianDay = (function() {
     this.number = parseInt(arg);
   };
 
-  // Instance methods:
-
   localJulianDay.prototype.plus = function(days) {
     return new daycount.counts.localJulianDay(this.number + days);
   };
@@ -306,7 +448,9 @@ daycount.counts.localJulianDay = (function() {
     return this.number.toString();
   };
 
-  // Class methods:
+  // Conversions.  Local Julian Day is the most normalized count, being just
+  // one integer to uniquely represent any day.  So it makes sense to convert
+  // between most counts via this one.
 
   localJulianDay.from_Date = function(system) {
     // from Wikipedia's Julian_day article:
@@ -379,7 +523,8 @@ daycount.counts.long = (function() {
   };
 
   long.prototype.toString = function() {
-    return this.baktun + '.' + this.katun + '.' + this.tun + '.' + this.winal + '.' + this.kin;
+    return this.baktun + '.' + this.katun + '.' + this.tun +
+      '.' + this.winal + '.' + this.kin;
   };
 
   long.pattern = /(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)/;
@@ -389,8 +534,11 @@ daycount.counts.long = (function() {
     var kin = days % 20;
     var winal = Math.floor(((days - kin) % 360) / 20);
     var tun = Math.floor(((days - kin - winal * 20) % 7200) / 360);
-    var katun = Math.floor(((days - kin - winal * 20 - tun * 360) % 144000) / 7200);
-    var baktun = Math.floor(((days - kin - winal * 20 - tun * 360 - katun * 7200) % (20 * 144000)) / 144000);
+    var katun = Math.floor(
+      ((days - kin - winal * 20 - tun * 360) % 144000) / 7200);
+    var baktun = Math.floor(
+      ((days - kin - winal * 20 - tun * 360 - katun * 7200) % (20 * 144000))
+      / 144000);
     return new daycount.counts.long({
       baktun: baktun,
       katun: katun,
@@ -422,11 +570,16 @@ daycount.counts.mars = (function() {
     this.year = parseInt(arg && arg.year);
     this.dayOfYear = parseInt(arg && arg.dayOfYear);
     this.ascent = this.dayOfYear <= 300 ? this.dayOfYear : NaN;
-    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340 ? this.dayOfYear - 300 : NaN;
-    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343 ? this.dayOfYear - 340 : NaN;
-    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344 ? this.dayOfYear - 343 : NaN;
-    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347 ? this.dayOfYear - 344 : NaN;
-    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387 ? this.dayOfYear - 347 : NaN;
+    this.firstfour = 300 < this.dayOfYear && this.dayOfYear <= 340
+      ? this.dayOfYear - 300 : NaN;
+    this.firstthree = 340 < this.dayOfYear && this.dayOfYear <= 343
+      ? this.dayOfYear - 340 : NaN;
+    this.one = 343 < this.dayOfYear && this.dayOfYear <= 344
+      ? this.dayOfYear - 343 : NaN;
+    this.secondthree = 344 < this.dayOfYear && this.dayOfYear <= 347
+      ? this.dayOfYear - 344 : NaN;
+    this.secondfour = 347 < this.dayOfYear && this.dayOfYear <= 387
+      ? this.dayOfYear - 347 : NaN;
     this.descent = 387 < this.dayOfYear ? this.dayOfYear - 387 : NaN;
   };
 
