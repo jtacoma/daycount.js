@@ -9,8 +9,7 @@ daycount.counts.dreamspell = (function () {
   };
 
   var reference = {
-    gregorian: new daycount.counts.gregorian(
-      { year: 2012, month: 12, dayOfMonth: 21 }),
+    gregorian: { year: 2012, month: 12, dayOfMonth: 21 },
     dreamspell: { month: 6, dayOfMonth: 9, kin: 207 },
   };
 
