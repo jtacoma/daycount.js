@@ -39,6 +39,12 @@ describe("daycount.counts.badi", function() {
         badi: new daycount.counts.badi(
           { major: -1, cycle: -1, year: -1, dayOfYear: 366 }),
       },
+      {
+        gregorian: new daycount.counts.gregorian(
+          { year: 1844, month: 12, dayOfMonth: 31 }),
+        badi: new daycount.counts.badi(
+          { major: 1, cycle: 1, year: 1, dayOfYear: 286 }),
+      }
     ];
     for(var i = 0; i < references.length; ++i)
     {

@@ -100,6 +100,6 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 5,
+  build: 6,
 };
 
