@@ -1,5 +1,5 @@
 /*
- * daycount.js v0.1.5
+ * daycount.js v0.1.6
  * http://yellowseed.org/daycount.js/
  *
  * Copyright 2011, Joshua Tacoma
@@ -100,7 +100,7 @@ daycount.counts = {};
 daycount.version_ = {
   major: 0,
   minor: 1,
-  build: 5,
+  build: 6,
 };
 
 daycount.counts.badi = (function() {
@@ -141,7 +141,7 @@ daycount.counts.badi = (function() {
     var dayOfYear = gregorian.countDaysSince(
         { year: gregorian.year, month: 3, dayOfMonth: 20});
     if (dayOfYear <= 0) dayOfYear += isLeapYear ? 366 : 365;
-    var year = gregorian.year - ((dayOfYear >= 285) ? 1845 : 1844);
+    var year = gregorian.year - ((dayOfYear > 286) ? 1845 : 1844);
     if (year >= 0) year += 1;
     var major = Math.floor((year - 1) / (19 * 19));
     if (major >= 0) major += 1;
