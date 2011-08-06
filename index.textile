@@ -1,15 +1,13 @@
 ---
 layout: default
-title: daycount.js
+title: daycount.js.
 ---
-
-h1. daycount.js
 
 This is a demonstration of the <a href="https://github.com/jtacoma/daycount.js">daycount.js</a> project.
 
 For example, here is some information about today:
 
-bq. <div id="today" />
+<blockquote><p id="today" /></blockquote>
 
 <script type="text/javascript">
   var today = new daycount.moment();

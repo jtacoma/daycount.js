@@ -1,9 +1,8 @@
 ---
 layout: post
 category: log
+title: daycount-0.1.2.js.
 ---
-
-h1. daycount-0.1.2.js
 
 This makes it two releases in one day - quite a pace, though not abnormal so early in a project.  Development will slow down soon as the basic features are nearly all implemented and the weekend is nearly over...
 

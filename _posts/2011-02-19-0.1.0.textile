@@ -1,9 +1,8 @@
 ---
 layout: post
 category: log
+title: daycount-0.1.0.js.
 ---
-
-h1. daycount-0.1.0.js
 
 Backwards-incompatible changes:
 

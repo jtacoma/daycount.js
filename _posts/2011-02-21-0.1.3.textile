@@ -1,9 +1,8 @@
 ---
 layout: post
 category: log
+title: daycount-0.1.3.js.
 ---
-
-h1. daycount-0.1.3.js
 
 Ok, one more release before I go to sleep.
 
