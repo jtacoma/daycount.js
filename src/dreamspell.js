@@ -57,6 +57,81 @@ daycount.counts.dreamspell = (function () {
     return dreamspell.localized.kinColorNames[this.kin % 4];
   };
 
+  dreamspell.prototype.kinNumbers = function()
+  {
+    var numbers = {
+      kin:  this.kin,
+      tone: this.kin % 13,
+      seal: this.kin % 20,
+    }
+    if (numbers.tone < 1)
+      numbers.tone = 13 + numbers.tone;
+    if (numbers.seal < 1)
+      numbers.seal = 20 + numbers.seal;
+
+    return numbers;
+  };
+
+  dreamspell.prototype.kinOracle = function()
+  {
+    var kin = this.kinNumbers();
+
+    var oracle = {
+      guide:    0,
+      antipode: 0,
+      analog:   0,
+      occult:   0,
+    }
+
+    oracle.guide = this.kinGuide();
+
+    oracle.antipode = kin.seal + 10;
+    if(oracle.antipode > 20)
+      oracle.antipode = kin.seal - 10;
+
+    oracle.analog = 19 - kin.seal;
+    if (oracle.analog <= 0)
+      oracle.analog = oracle.analog + 20;
+
+    oracle.occult = 21 - kin.seal;
+    // tone = 14 - kin.tone
+
+    return oracle;
+  };
+
+  dreamspell.prototype.kinWave = function()
+  {
+    var kin = this.kinNumbers();
+
+    // magnetic seal
+    if (kin.seal >= kin.tone)
+      return kin.seal - kin.tone + 1;
+    else
+      return 20 + kin.seal - kin.tone + 1;
+  }
+
+  dreamspell.prototype.kinGuide = function()
+  {
+    var kin = this.kinNumbers();
+    var guide;
+
+    if (kin.tone == 1 || kin.tone == 6 || kin.tone == 11) {
+      guide = kin.seal;
+    } else if (kin.tone == 2 || kin.tone == 7 || kin.tone == 12) {
+      guide = (kin.seal - 8) % 20;
+    } else if (kin.tone == 3 || kin.tone == 8 || kin.tone == 13) {
+      guide = (kin.seal + 4) % 20;
+    } else if (kin.tone == 4 || kin.tone == 9) {
+      guide = (kin.seal - 4) % 20;
+    } else if (kin.tone == 5 || kin.tone == 10) {
+      guide = (kin.seal + 8) % 20;
+    }
+
+    guide = guide < 1 ? 20 + guide : guide;
+
+    return guide;
+  }
+
   dreamspell.prototype.toString = function() {
     return (isNaN(this.month) ? 'x' : this.month)
       + '.' + (isNaN(this.dayOfMonth) ? 'x' : this.dayOfMonth)
