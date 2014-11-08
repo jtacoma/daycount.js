@@ -103,11 +103,23 @@ daycount.counts.dreamspell = (function () {
   {
     var kin = this.kinNumbers();
 
+    var wave = [], magnetic = 0;
+
+    // wave number
+    wave.push(Math.ceil( this.kin / 13 ));
+
     // magnetic seal
     if (kin.seal >= kin.tone)
-      return kin.seal - kin.tone + 1;
+      magnetic = kin.seal - kin.tone + 1;
     else
-      return 20 + kin.seal - kin.tone + 1;
+      magnetic = 20 + kin.seal - kin.tone + 1;
+
+    wave.push(magnetic);
+
+    for (var i = 1; i < 13; i++)
+      wave.push( (magnetic + i) % 20 );
+
+    return wave;
   }
 
   dreamspell.prototype.kinGuide = function()
